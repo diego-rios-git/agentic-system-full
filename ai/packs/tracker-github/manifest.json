@@ -1,0 +1,14 @@
+{
+  "_comment": "Pack tracker-github. Guia para que un agente sin contexto configure como se mueven los issues de GitHub en el proyecto (etiquetas o tablero de proyectos), sin cerrarlos: modo, ids medidos, vinculo con la historia, verificacion.",
+  "skills": [
+    {
+      "name": "tracker-github-adaptar",
+      "title": "Adaptar el tracker GitHub",
+      "description": "Configurar el modo (etiquetas o tablero de proyectos), los ids medidos y el vinculo con la historia para que los eventos del tracker funcionen en este proyecto.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    }
+  ],
+  "agents": []
+}

@@ -1,0 +1,34 @@
+{
+  "_comment": "Pack multi-tenant. Aisla los datos entre clientes. Requiere `tenant.column` en ai-workspace.json: sin ese dato el gate no verifica nada y lo dice explicitamente.",
+  "skills": [],
+  "agents": [],
+  "gates": [
+    {
+      "id": "tenant-isolation",
+      "label": "aislamiento entre clientes",
+      "script": "ai/packs/multi-tenant/scripts/check-tenant-isolation.js",
+      "source": "ai/packs/multi-tenant/rules/tenant-isolation.md",
+      "scope": "repo",
+      "appliesTo": {
+        "extensions": [
+          ".ts"
+        ]
+      },
+      "args": [
+        "--repo",
+        "{repo}",
+        "--baseline"
+      ],
+      "fileArgs": [
+        "--repo",
+        "{repo}",
+        "--target",
+        "{rel}",
+        "--baseline"
+      ],
+      "needs": [
+        "tenantDialect"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "_comment": "Pack odd. Organic Driven Development: el flujo escala solo segun lo que el trabajo necesita. Lo simple se hace directo, lo incierto se investiga, lo grande arma su documento y lo critico se verifica. Viene de gentle-ai v4 (Gentleman Programming), donde reemplazo a SDD; aca es una alternativa al pack openspec: se instala uno u otro. Origen, que se tomo y que se dejo: references/odd-origen.md.",
+  "skills": [
+    {
+      "name": "odd-protocolo",
+      "title": "ODD: el protocolo",
+      "description": "Todo pedido con ODD: tamaño, riesgo y qué mecanismo se activa.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "odd-documento",
+      "title": "ODD: el documento de la funcionalidad",
+      "description": "Trabajo grande con ODD: un archivo con specs, tareas y bitácora.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "odd-tests",
+      "title": "ODD: tests primero",
+      "description": "Tests con ODD: un rojo por regla y uno por comportamiento tocado.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "odd-verificacion",
+      "title": "ODD: verificación proporcional",
+      "description": "Cuánto verificar según el riesgo y cuándo lanzar el verificador.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    }
+  ],
+  "agents": [
+    {
+      "name": "odd-verificador",
+      "title": "Verificador ODD",
+      "description": "Verificar sin contexto un cambio de riesgo alto contra cada spec.",
+      "mode": "subagent",
+      "model": "sonnet",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": true
+      },
+      "state": "experimental"
+    }
+  ],
+  "gates": [],
+  "_comment_sdd": "Adaptador del ciclo. Con changeLayout file cada cambio es UN documento (odd/tasks/<funcionalidad>.md, archivado como odd/tasks/archive/AAAA-MM-DD-<funcionalidad>.md) y rf:, cierra_rf: y pendiente_rf: van en lineas propias de ese documento. Un escenario es una linea `S<n>. <titulo corto>: <texto>`; el gate de cobertura toma el titulo corto. Ver docs/agregar-un-sdd.md y scripts/lib/sdd.js.",
+  "sdd": {
+    "provider": "odd",
+    "changesDir": "odd/tasks",
+    "changeLayout": "file",
+    "archiveSegment": "archive",
+    "scenarioPattern": "^S\\d+\\.\\s+(.+?)(?::\\s|\\s*$)",
+    "docExtension": ".md"
+  }
+}
