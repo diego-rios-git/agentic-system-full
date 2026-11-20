@@ -1,0 +1,63 @@
+{
+  "_comment": "Configuracion que usan los tests de la base. Los repositorios son los fixtures de test/fixtures/, con rutas relativas a la raiz del workspace igual que en un proyecto real. La cargan los gates via AI_WORKSPACE_CONFIG.",
+  "version": 1,
+  "project": {
+    "name": "fixture",
+    "title": "Fixture de pruebas",
+    "ticketPrefix": "TST",
+    "language": "es"
+  },
+  "topology": "multi-repo",
+  "repos": [
+    {
+      "name": "js-repo",
+      "path": "test/fixtures/js-repo",
+      "packs": [
+        "nestjs"
+      ],
+      "baseBranch": "main",
+      "testCommand": "npm test"
+    },
+    {
+      "name": "dotnet-repo",
+      "path": "test/fixtures/dotnet-repo",
+      "packs": [
+        "dotnet"
+      ],
+      "languages": [
+        "dotnet"
+      ],
+      "baseBranch": "main",
+      "testCommand": "dotnet test"
+    },
+    {
+      "name": "empty-repo",
+      "path": "test/fixtures/empty-repo",
+      "packs": [
+        "nextjs"
+      ],
+      "baseBranch": "main"
+    },
+    {
+      "_comment": "No existe en el disco a proposito: es el fixture del camino 'repositorio sin clonar'.",
+      "name": "missing-repo",
+      "path": "test/fixtures/no-existe",
+      "packs": [
+        "nestjs"
+      ],
+      "baseBranch": "main"
+    }
+  ],
+  "packs": [
+    "multi-tenant",
+    "openspec"
+  ],
+  "harnesses": [],
+  "worktrees": {
+    "enabled": false,
+    "slots": []
+  },
+  "tenant": {
+    "column": "tenant_id"
+  }
+}

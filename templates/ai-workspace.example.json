@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "project": {
+    "name": "mi-proyecto",
+    "title": "Mi Proyecto",
+    "ticketPrefix": "ABC",
+    "language": "es"
+  },
+  "_comment_topology": "multi-repo: la base vive en la raíz y los repositorios de aplicación se clonan adentro. single-repo: la base convive con el código en el mismo repositorio, y `repos` tiene una sola entrada con path \".\".",
+  "topology": "multi-repo",
+  "repos": [
+    {
+      "name": "mi-api",
+      "path": "mi-api",
+      "packs": [
+        "nestjs"
+      ],
+      "baseBranch": "develop",
+      "testCommand": "npm test",
+      "typecheckCommand": "npx tsc --noEmit",
+      "consumes": [],
+      "_comment_database": "Solo si el repositorio tiene UNA base de datos compartida con sus slots. Activa el hook que impide migrar, sembrar o generar migraciones desde un slot. Los nombres son los de los scripts de TU proyecto; sin este bloque el hook no se instala. Ver ai/core/procedures/shadow-migration.md.",
+      "database": {
+        "shared": true,
+        "migrationsDir": "src/database/migrations",
+        "writeCommands": [
+          "migration:run",
+          "migration:revert",
+          "seed"
+        ],
+        "generateCommands": [
+          "migration:generate"
+        ],
+        "readOnlyAllowed": [
+          "migration:show"
+        ],
+        "generateAlternative": "node ai/packs/nestjs/scripts/migration-generate-shadow.js",
+        "statusCommand": "npm run migration:show"
+      },
+      "typecheckTestCommand": "npm run typecheck:test",
+      "_comment_typecheckTestCommand": "El chequeo de tipos que SI mira los tests. Muchos runners transpilan los specs sin chequear tipos y el typecheck normal los excluye. Ver ai/core/rules/verificar-lo-que-el-runner-no-ve.md."
+    },
+    {
+      "name": "mi-app",
+      "path": "mi-app",
+      "packs": [
+        "nextjs"
+      ],
+      "baseBranch": "develop",
+      "testCommand": "npm test",
+      "typecheckCommand": "npx tsc --noEmit",
+      "consumes": [
+        "mi-api"
+      ],
+      "_comment_consumes": "Repositorios cuyo contrato consume este. Define el orden de merge: proveedores primero."
+    }
+  ],
+  "_comment_packs": "Packs que aplican a todo el workspace, no a un repositorio en particular.",
+  "packs": [],
+  "harnesses": [
+    "claude",
+    "opencode",
+    "agents-md"
+  ],
+  "worktrees": {
+    "enabled": true,
+    "dir": "worktrees",
+    "slots": [
+      "implementation-1",
+      "implementation-2",
+      "review"
+    ]
+  },
+  "_comment_tenant": "Solo con el pack multi-tenant instalado: nombre de la columna que aísla los datos de cada cliente.",
+  "tenant": {
+    "column": "tenant_id"
+  },
+  "_comment_tracker": "Sistema de tickets: none (por defecto), jira o github. Sin tracker el agente no mueve tarjetas; si hay tablero de requisitos, mueve la ficha. El bloque propio de cada tracker lo describen las guias de los packs tracker-jira y tracker-github (declararlos en `packs`).",
+  "tracker": {
+    "kind": "none"
+  },
+  "_comment_forge": "Host de PRs: none (por defecto), github, bitbucket o gitlab.",
+  "forge": {
+    "kind": "none"
+  },
+  "_comment_commits": "forbidAiAttribution: instala el hook que bloquea atribucion de IA en el mensaje de un commit.",
+  "commits": {
+    "forbidAiAttribution": false
+  },
+  "_comment_hooks": "Cualquier hook de la base se apaga con { enabled: false }; los opcionales se encienden con { enabled: true }. Se registran con `node scripts/consolidate-skills.js --wrappers`; nunca se editan a mano en .claude/settings.json.",
+  "hooks": {
+    "pre-commit-gates": {
+      "enabled": false
+    },
+    "pre-bash-heredoc": {
+      "enabled": false
+    }
+  },
+  "_comment_protectedPaths": "Rutas que el agente no puede escribir ni editar sin autorizacion temporal del operador (node scripts/allow-protected-edit.js <archivo>). Los packs de ORM ya declaran las suyas (migraciones); esto agrega las del proyecto: lockfiles, clientes generados, contratos.",
+  "protectedPaths": [],
+  "_comment_statusline": "Umbrales de color del costo en la status line (USD de la sesion).",
+  "statusline": {
+    "costWarnUsd": 10,
+    "costAlertUsd": 20
+  },
+  "_comment_opcionales": "Otros bloques opcionales: `requirements` (tablero de requisitos), `autonomous` (una sesion por tarea), `e2e` (linter de scripts e2e), `review.outputDir` (carpeta del informe de un review de rama ajena). Ver docs/circuito-de-trabajo.md."
+}

@@ -1,0 +1,55 @@
+{
+  "_comment": "Pack analisis-funcional. Metodo de analisis para PMs, analistas y devs sobre la ficha unica de redactar-requisito: de un documento a la ficha, cambios, revision, cobertura contra el codigo y camino critico. Salio de las skills del agente de analisis de LinXDASH, generalizadas. Lo propio de cada proyecto va en ai/local/analisis.md.",
+  "skills": [
+    {
+      "name": "metodo-analista",
+      "title": "Método de análisis funcional",
+      "description": "Antes de sacar, cambiar, revisar o auditar un requisito.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "ficha-desde-documento",
+      "title": "De un documento a la ficha",
+      "description": "Sacar requisitos de un documento: SRS, minuta, pedido del cliente.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "cambio-de-requisito",
+      "title": "Cambio sobre un requisito",
+      "description": "Cambiar una parte de un requisito que ya tiene ficha.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "revisar-ficha",
+      "title": "Revisar una ficha",
+      "description": "Ver si una ficha está lista para estimar o implementar.",
+      "compatibility": "Run from the workspace root. Solo lectura de la ficha.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "auditar-cobertura-rf",
+      "title": "Auditar la cobertura de un requisito",
+      "description": "Saber si un requisito ya está hecho en el código o es de otro.",
+      "compatibility": "Run from the workspace root. Solo lectura del código.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "catalogo-y-camino-critico",
+      "title": "Catálogo y camino crítico",
+      "description": "Ordenar por dependencias varios requisitos de un alcance.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    }
+  ],
+  "agents": [],
+  "gates": []
+}
