@@ -1,0 +1,66 @@
+{
+  "_comment": "Pack openspec. Ciclo dirigido por especificacion. Requiere el CLI de OpenSpec y la estructura openspec/changes en cada repositorio.",
+  "skills": [
+    {
+      "name": "spec-scope-discipline",
+      "title": "Disciplina de alcance",
+      "description": "Controlar el alcance de un cambio antes de proponerlo o implementarlo.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "spec-propose",
+      "title": "Proponer un cambio",
+      "description": "Proponer un cambio con su diseño y sus escenarios, antes de escribir código.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "spec-driven-testing",
+      "title": "Tests desde la especificacion",
+      "description": "Convertir los escenarios de aceptación en tests que fallen primero.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "spec-apply",
+      "title": "Implementar un cambio",
+      "description": "Implementar un cambio ya diseñado y con sus tests en rojo.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "spec-archive",
+      "title": "Archivar un cambio",
+      "description": "Cerrar y archivar un cambio ya mergeado.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    }
+  ],
+  "agents": [
+    {
+      "name": "spec-agent",
+      "title": "Spec Agent",
+      "description": "Gestionar el ciclo de un cambio dirigido por especificación, de punta a punta.",
+      "mode": "subagent",
+      "model": "sonnet",
+      "state": "experimental"
+    }
+  ],
+  "gates": [],
+  "_comment_sdd": "Adaptador del ciclo dirigido por especificacion. El ciclo -proponer, disenar, escribir los tests, implementar, archivar- es una forma de trabajar y vive en los procedimientos; esto es lo unico especifico de OpenSpec. Cambiar de herramienta manana es escribir un pack con estas claves, sin tocar los procedimientos ni el gate. Ver scripts/lib/sdd.js.",
+  "sdd": {
+    "provider": "openspec",
+    "changesDir": "openspec/changes",
+    "archiveSegment": "archive",
+    "scenarioPattern": "^#{3,4}\\s+Scenario:\\s*(.+?)\\s*$",
+    "docExtension": ".md",
+    "cli": "openspec"
+  },
+  "_comment_gates": "El gate de cobertura de escenarios subio al nucleo (scripts/check-scenario-coverage.js): verifica el contrato, no OpenSpec, y sale con 0 cuando ningun pack declara proveedor."
+}

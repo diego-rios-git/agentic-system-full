@@ -1,0 +1,257 @@
+{
+  "template": {
+    "name": "agentic-system",
+    "version": "1.1.0",
+    "repository": "https://github.com/Openix-AS/agentic-system",
+    "description": "Base de trabajo con IA para arrancar un proyecto: agentes, reglas, patrones, revisiones y verificaciones automaticas."
+  },
+  "_comment_ownership": "Frontera de propiedad. Lo declarado en `template` lo actualiza template-sync; lo declarado en `project` no se toca NUNCA. Un archivo que no matchee ninguno de los dos se reporta como no clasificado.",
+  "ownership": {
+    "template": [
+      "ai/core/**",
+      "ai/packs/**",
+      "scripts/**",
+      "docs/**",
+      "templates/**",
+      "init.js",
+      "template.manifest.json",
+      "VERSION",
+      "CHANGELOG.md",
+      "CONTRIBUTING.md"
+    ],
+    "project": [
+      "ai/local/**",
+      "ai-workspace.json",
+      "template.lock.json",
+      "CLAUDE.md",
+      "AGENTS.md",
+      "README.md",
+      "INVENTORY.md",
+      ".*-baseline.json",
+      "**/settings.local.json",
+      ".claude/**",
+      ".opencode/**"
+    ]
+  },
+  "_comment_harnesses": "Catalogo de harnesses. El contenido vive UNA vez en ai/; lo que un harness recibe es una proyeccion con el frontmatter que esa herramienta espera. El harness NO es indispensable: un proyecto puede declarar \"harnesses\": [] y el sistema funciona igual. Agregar una herramienta que la base no conoce -Cursor, Windsurf, la que sea- NO requiere tocar codigo: se declara el mismo bloque en `harnessDefinitions` de ai-workspace.json. Ver docs/agregar-un-harness.md y scripts/lib/harnesses.js.",
+  "harnesses": {
+    "claude": {
+      "title": "Claude Code",
+      "output": ".claude/",
+      "generated": true,
+      "skillsDir": ".claude/skills",
+      "skillFile": "SKILL.md",
+      "agentsDir": ".claude/agents",
+      "_comment_frontmatter": "Claude Code no tiene un `edit: false`: si se omite `tools`, el agente hereda todas. Por eso readOnlyTools enumera las permitidas, para que la restriccion sea real.",
+      "frontmatter": {
+        "description": "block",
+        "mode": false,
+        "tools": "list",
+        "readOnlyTools": [
+          "Read",
+          "Grep",
+          "Glob",
+          "Bash",
+          "WebFetch",
+          "WebSearch"
+        ],
+        "model": "alias"
+      }
+    },
+    "opencode": {
+      "title": "OpenCode",
+      "output": ".opencode/",
+      "generated": true,
+      "skillsDir": ".opencode/skills",
+      "skillFile": "SKILL.md",
+      "agentsDir": ".opencode/agents",
+      "_comment_frontmatter": "OpenCode usa un mapa de booleanos para las herramientas y nombra los modelos como proveedor/modelo.",
+      "frontmatter": {
+        "description": "inline",
+        "mode": true,
+        "tools": "map",
+        "model": "mapped"
+      },
+      "modelMap": {
+        "opus": "anthropic/claude-opus-5",
+        "sonnet": "anthropic/claude-sonnet-5",
+        "haiku": "anthropic/claude-haiku-4-5"
+      }
+    },
+    "agents-md": {
+      "title": "AGENTS.md (Codex y otras)",
+      "output": "AGENTS.md",
+      "generated": true,
+      "_comment": "Sin skillsDir ni agentsDir a proposito: estas herramientas leen el AGENTS.md de la raiz y no tienen arbol propio. Se genera como documento, no como punteros."
+    }
+  },
+  "_comment_core": "Se instala siempre, sin importar el stack. El detalle de skills y agentes vive en ai/core/manifest.json; acá se listan los archivos que template-sync debe mantener al día.",
+  "core": {
+    "rules": [
+      "ai/core/rules/datos-sensibles.md",
+      "ai/core/rules/antipatterns.js"
+    ],
+    "procedures": [
+      "ai/core/procedures/code-professor.md",
+      "ai/core/procedures/git-commit-workflow.md",
+      "ai/core/procedures/create-branch.md",
+      "ai/core/procedures/gate-from-finding.md",
+      "ai/core/procedures/pr-review.md",
+      "ai/core/procedures/worktree-slots.md",
+      "ai/core/procedures/project-loader.md"
+    ],
+    "agents": [
+      "ai/core/agents/workspace-router.md",
+      "ai/core/agents/qa-agent.md",
+      "ai/core/agents/code-reviewer.md",
+      "ai/core/agents/security-auditor.md",
+      "ai/core/agents/project-setup-agent.md"
+    ],
+    "prompts": [],
+    "skills": [],
+    "scripts": [
+      "scripts/lib/workspace-config.js",
+      "scripts/lib/asset-roots.js",
+      "scripts/lib/languages.js",
+      "scripts/lib/harnesses.js",
+      "scripts/lib/test-discovery.js",
+      "scripts/lib/baseline.js",
+      "scripts/lib/gates.js",
+      "scripts/consolidate-skills.js",
+      "scripts/check-context-links.js",
+      "scripts/run-gates.js",
+      "scripts/check-secrets.js",
+      "scripts/hooks/pre-write-secrets.js",
+      "scripts/hooks/post-edit-checks.js",
+      "scripts/check-antipatterns.js",
+      "scripts/check-duplication.js",
+      "scripts/check-semgrep.js",
+      "scripts/lib/render.js",
+      "scripts/lib/template-files.js",
+      "scripts/template-sync.js",
+      "scripts/manage-worktree.js",
+      "scripts/lib/sdd.js",
+      "scripts/check-scenario-coverage.js",
+      "scripts/lib/gate-cli.js",
+      "scripts/verify-findings.js",
+      "scripts/baseline-report.js",
+      "scripts/check-context-budget.js"
+    ],
+    "templates": [
+      "templates/ai-workspace.example.json",
+      "templates/claude-settings.json",
+      "templates/CLAUDE.md.tpl",
+      "templates/AGENTS.md.tpl",
+      "templates/README.md.tpl",
+      "templates/INVENTORY.md.tpl",
+      "templates/project-brief.md.tpl",
+      "templates/rules-negocio.md.tpl",
+      "templates/rules-datos-sensibles.md.tpl"
+    ],
+    "docs": [
+      "docs/onboarding.md",
+      "docs/sistema-agentico.md",
+      "docs/agregar-un-harness.md",
+      "docs/agregar-un-pack-de-lenguaje.md",
+      "docs/agregar-un-sdd.md",
+      "docs/manual-ia-por-roles.md",
+      "docs/verificar-la-base.md",
+      "docs/costo-de-contexto.md"
+    ],
+    "tests": [
+      "test/helpers.js",
+      "test/gates.test.js",
+      "test/contract.test.js",
+      "test/rules.test.js",
+      "test/verify-findings.test.js",
+      "test/fixtures/ai-workspace.test.json"
+    ]
+  },
+  "_comment_packs": "Opcionales. El init instala solo los elegidos. `appliesTo` indica si el pack se declara a nivel de repositorio o de workspace.",
+  "packs": {
+    "nestjs": {
+      "title": "Backend NestJS",
+      "appliesTo": "repo",
+      "description": "Arquitectura de modulos, patrones de base de datos, DTOs y validacion, errores con codigos de dominio, migraciones, testing.",
+      "procedures": [
+        "ai/packs/nestjs/procedures/nestjs-module-development.md",
+        "ai/packs/nestjs/procedures/nestjs-database-patterns.md",
+        "ai/packs/nestjs/procedures/nestjs-dto-patterns.md",
+        "ai/packs/nestjs/procedures/nestjs-error-handling.md",
+        "ai/packs/nestjs/procedures/nestjs-create-migration.md"
+      ],
+      "agents": [],
+      "rules": [
+        "ai/packs/nestjs/rules/antipatterns.js"
+      ],
+      "scripts": []
+    },
+    "nextjs": {
+      "title": "Frontend Next.js",
+      "appliesTo": "repo",
+      "description": "Componentes, tablas de datos, formularios con validacion, hooks de data-fetching, servidor vs cliente, manejo de errores, i18n.",
+      "procedures": [
+        "ai/packs/nextjs/procedures/nextjs-server-vs-client.md",
+        "ai/packs/nextjs/procedures/nextjs-data-fetching.md",
+        "ai/packs/nextjs/procedures/nextjs-create-component.md",
+        "ai/packs/nextjs/procedures/nextjs-bff-endpoint.md"
+      ],
+      "agents": [],
+      "rules": [
+        "ai/packs/nextjs/rules/antipatterns.js"
+      ],
+      "scripts": []
+    },
+    "dotnet": {
+      "title": "Backend .NET / C#",
+      "appliesTo": "repo",
+      "description": "Perfil de lenguaje para C#, anti-patrones de .NET y los procedimientos del stack: desarrollo de una funcionalidad, patrones de EF Core, contratos de entrada y salida, manejo de errores y migraciones.",
+      "procedures": [
+        "ai/packs/dotnet/procedures/dotnet-feature-development.md",
+        "ai/packs/dotnet/procedures/dotnet-database-patterns.md",
+        "ai/packs/dotnet/procedures/dotnet-dto-patterns.md",
+        "ai/packs/dotnet/procedures/dotnet-error-handling.md",
+        "ai/packs/dotnet/procedures/dotnet-create-migration.md"
+      ],
+      "agents": [],
+      "rules": [
+        "ai/packs/dotnet/rules/antipatterns.js",
+        "ai/packs/dotnet/rules/semgrep/antipatterns.yml"
+      ],
+      "scripts": []
+    },
+    "multi-tenant": {
+      "title": "Aislamiento por tenant",
+      "appliesTo": "workspace",
+      "description": "Filtrado obligatorio por la columna de tenant y su verificacion automatica.",
+      "procedures": [],
+      "agents": [],
+      "rules": [
+        "ai/packs/multi-tenant/rules/tenant-isolation.md"
+      ],
+      "scripts": [
+        "ai/packs/multi-tenant/scripts/check-tenant-isolation.js"
+      ]
+    },
+    "openspec": {
+      "title": "Ciclo dirigido por especificacion",
+      "appliesTo": "workspace",
+      "description": "Ciclo propuesta -> diseno -> tests -> implementacion -> archivado sobre OpenSpec, con disciplina de alcance, agentes SDD y verificacion de cobertura de escenarios. Requiere el CLI de OpenSpec instalado.",
+      "requires": [
+        "openspec"
+      ],
+      "procedures": [
+        "ai/packs/openspec/procedures/spec-scope-discipline.md",
+        "ai/packs/openspec/procedures/spec-propose.md",
+        "ai/packs/openspec/procedures/spec-driven-testing.md",
+        "ai/packs/openspec/procedures/spec-apply.md",
+        "ai/packs/openspec/procedures/spec-archive.md"
+      ],
+      "agents": [
+        "ai/packs/openspec/agents/spec-agent.md"
+      ],
+      "rules": [],
+      "scripts": []
+    }
+  }
+}

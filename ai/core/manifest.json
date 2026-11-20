@@ -1,0 +1,286 @@
+{
+  "_comment": "Activos del núcleo: se instalan en todo proyecto, sin importar el stack. El contenido de cada entrada vive en procedures/<name>.md o agents/<name>.md de esta misma carpeta.",
+  "skills": [
+    {
+      "name": "code-professor",
+      "title": "Code Professor",
+      "description": "Explicar un cambio de código de forma educativa: qué se hizo, por qué y qué mirar.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "validado"
+    },
+    {
+      "name": "git-commit-workflow",
+      "title": "Git Commit Workflow",
+      "description": "Commitear. Solo con pedido explícito de la persona; no hace nada más.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "validado"
+    },
+    {
+      "name": "create-branch",
+      "title": "Create Branch",
+      "description": "Crear una rama con la nomenclatura del proyecto, partiendo de su rama base.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "validado"
+    },
+    {
+      "name": "gate-from-finding",
+      "title": "De un error encontrado a un gate que lo impide",
+      "description": "Convertir un error confirmado en una verificación automática que lo impida.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "validado"
+    },
+    {
+      "name": "pr-review",
+      "title": "PR Review",
+      "description": "Revisar un cambio completo: gates una vez, agentes en paralelo, hallazgos verificados.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "validado"
+    },
+    {
+      "name": "worktree-slots",
+      "title": "Slots de worktree",
+      "description": "Abrir, listar o cerrar un espacio aislado para trabajar o revisar otra rama.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "validado"
+    },
+    {
+      "name": "project-loader",
+      "title": "Cargar el proyecto",
+      "description": "Cargar el contexto del proyecto por primera vez, después de instalar la base.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    }
+  ],
+  "_comment_agents": "Arquetipos: funcionan sobre cualquier repositorio declarado. Los patrones de stack los aportan los procedimientos del pack, no el agente. `mode: primary` es punto de entrada de sesión y por eso no fija modelo: quien abre la sesión ya lo eligió.",
+  "agents": [
+    {
+      "name": "workspace-router",
+      "title": "Workspace Router",
+      "description": "Punto de entrada en la raíz del workspace: decide a qué repositorio va la tarea.",
+      "mode": "primary",
+      "filenames": {
+        "opencode": "workspace"
+      },
+      "state": "validado"
+    },
+    {
+      "name": "qa-agent",
+      "title": "QA Agent",
+      "description": "Auditar el código de la rama contra el diseño acordado y los criterios de aceptación.",
+      "mode": "subagent",
+      "model": "opus",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": true
+      },
+      "state": "validado"
+    },
+    {
+      "name": "code-reviewer",
+      "title": "Code Reviewer",
+      "description": "Revisar corrección, arquitectura, rendimiento, mantenibilidad y tests de un cambio.",
+      "mode": "subagent",
+      "model": "opus",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": true
+      },
+      "state": "validado"
+    },
+    {
+      "name": "security-auditor",
+      "title": "Security Auditor",
+      "description": "Auditar autorización, aislamiento entre clientes, secretos y entrada no confiable.",
+      "mode": "subagent",
+      "model": "opus",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": true
+      },
+      "state": "validado"
+    },
+    {
+      "name": "project-setup-agent",
+      "title": "Project Setup Agent",
+      "description": "Convertir un resumen del proyecto en brief, glosario, reglas y datos sensibles.",
+      "mode": "subagent",
+      "model": "opus",
+      "state": "experimental"
+    }
+  ],
+  "_comment_language": "Perfil de lenguaje del nucleo. Esta aca y no en un pack porque los scripts de la propia base son JavaScript: sin este perfil, el hook de escritura no cubriria ni sus propios gates. Un repositorio que no quiera este perfil lo excluye con `languages` en ai-workspace.json. Ver scripts/lib/languages.js.",
+  "language": {
+    "id": "javascript",
+    "extensions": [
+      ".ts",
+      ".tsx",
+      ".js",
+      ".jsx",
+      ".mjs",
+      ".cjs",
+      ".mts",
+      ".cts"
+    ],
+    "ignoreDirs": [
+      ".next",
+      ".turbo",
+      ".nuxt",
+      ".svelte-kit",
+      "storybook-static"
+    ],
+    "ignorePaths": [
+      "(^|/)migrations?/",
+      "(^|/)__?generated__?/",
+      "\\.d\\.ts$"
+    ],
+    "testPatterns": [
+      "\\.(spec|test)\\.[cm]?[jt]sx?$",
+      "(^|/)(tests?|__tests__|__mocks__|e2e)/"
+    ],
+    "syntax": {
+      "lineComment": "//",
+      "stringDelimiters": [
+        "\"",
+        "'",
+        "`"
+      ]
+    },
+    "envAccess": [
+      "process.env",
+      "import.meta.env",
+      "configService",
+      "getOrThrow"
+    ],
+    "testTitles": {
+      "strategy": "callback",
+      "functions": [
+        "it",
+        "test"
+      ]
+    }
+  },
+  "_comment_gates": "Verificaciones automáticas del núcleo. Las consumen el hook de escritura y el orquestador de review desde el mismo registro: agregar un gate acá lo activa en los dos caminos.",
+  "gates": [
+    {
+      "id": "context-links",
+      "label": "rutas citadas",
+      "script": "scripts/check-context-links.js",
+      "source": "una ruta que no existe hace que el agente improvise en vez de fallar",
+      "scope": "workspace",
+      "appliesTo": {
+        "extensions": [
+          ".md",
+          ".json",
+          ".yaml",
+          ".yml"
+        ],
+        "paths": [
+          "ai/",
+          ".claude/",
+          ".opencode/",
+          "docs/",
+          "CLAUDE.md",
+          "AGENTS.md"
+        ]
+      },
+      "args": [
+        "--scope",
+        "workspace",
+        "--baseline"
+      ]
+    },
+    {
+      "id": "antipatterns",
+      "label": "anti-patrones",
+      "script": "scripts/check-antipatterns.js",
+      "source": "las reglas las aportan el núcleo y los packs instalados",
+      "scope": "repo",
+      "appliesTo": {
+        "extensions": [
+          ".ts",
+          ".tsx",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".cjs"
+        ]
+      },
+      "args": [
+        "--repo",
+        "{repo}",
+        "--baseline"
+      ],
+      "fileArgs": [
+        "--repo",
+        "{repo}",
+        "--target",
+        "{rel}",
+        "--baseline"
+      ]
+    },
+    {
+      "id": "duplication",
+      "label": "código duplicado",
+      "script": "scripts/check-duplication.js",
+      "source": "jscpd — extraer a un módulo compartido en vez de repetir",
+      "scope": "repo",
+      "_comment_onWrite": "Fuera del hook de escritura: jscpd necesita al menos dos archivos para detectar un clon, así que no puede acotarse al archivo editado. Barrer el repositorio entero en cada edición excede el tiempo límite del hook, con lo cual el gate aparentaba correr sin correr. Sigue corriendo en run-gates.js.",
+      "onWrite": false,
+      "appliesTo": {
+        "extensions": [
+          ".ts",
+          ".tsx",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".cjs"
+        ]
+      },
+      "args": [
+        "--repo",
+        "{repo}",
+        "--baseline"
+      ]
+    },
+    {
+      "id": "semgrep",
+      "label": "reglas estructurales",
+      "script": "scripts/check-semgrep.js",
+      "source": "lo que una expresion regular por linea no puede ver: la forma del codigo",
+      "scope": "repo",
+      "_comment_onWrite": "Fuera del hook de escritura: semgrep arranca un proceso propio y tarda segundos, lo que excede el tiempo limite del hook en cada edicion. Sigue corriendo en run-gates.js.",
+      "onWrite": false,
+      "_comment_opcional": "Semgrep no es una dependencia de la base. Sin reglas declaradas el gate sale con 0 y lo dice; con reglas declaradas y la herramienta ausente sale con 2, nunca con 0.",
+      "args": [
+        "--repo",
+        "{repo}",
+        "--baseline"
+      ]
+    },
+    {
+      "id": "scenario-coverage",
+      "label": "cobertura de escenarios",
+      "script": "scripts/check-scenario-coverage.js",
+      "source": "cada escenario de aceptacion necesita su test",
+      "scope": "repo",
+      "_comment": "Sale con 0 cuando ningun pack declara un ciclo dirigido por especificacion: no hay nada que verificar. El proveedor -donde viven los documentos, como se marca un escenario- es un dato del pack. Ver scripts/lib/sdd.js.",
+      "onWrite": false,
+      "args": [
+        "--repo",
+        "{repo}"
+      ],
+      "baseline": false,
+      "_comment_baseline": "Sin baseline a proposito: un escenario sin test no es deuda que convenga congelar."
+    }
+  ]
+}

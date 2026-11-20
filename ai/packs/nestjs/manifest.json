@@ -1,0 +1,77 @@
+{
+  "_comment": "Pack nestjs. Se instala en los repositorios que lo declaran en `packs`. Las reglas de anti-patrones viven en rules/antipatterns.js y las carga el motor del núcleo.",
+  "skills": [
+    {
+      "name": "nestjs-module-development",
+      "title": "Desarrollo de un módulo NestJS",
+      "description": "Escribir o modificar un módulo de backend en NestJS.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "nestjs-database-patterns",
+      "title": "Patrones de base de datos con TypeORM",
+      "description": "Entidades, relaciones, índices, transacciones y concurrencia con TypeORM.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "nestjs-dto-patterns",
+      "title": "Patrones de DTO",
+      "description": "Definir el contrato de entrada y salida de un endpoint en NestJS.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "nestjs-error-handling",
+      "title": "Manejo de errores",
+      "description": "Errores con códigos de dominio y su traducción a estado HTTP en NestJS.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "nestjs-create-migration",
+      "title": "Crear una migración",
+      "description": "Generar y aplicar una migración de esquema. Solo con pedido explícito.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    }
+  ],
+  "agents": [],
+  "_comment_tenant": "Dialecto de consulta de TypeORM, para el gate del pack multi-tenant. Vive aca y no dentro del script porque describe como se ve una consulta en ESTE ORM: un proyecto con EF Core, Dapper, Prisma o Mongo declara el suyo en el pack de su stack. Solo se usa si el pack multi-tenant tambien esta instalado.",
+  "tenant": {
+    "dialect": "typeorm",
+    "readMethods": [
+      "find",
+      "findOne",
+      "findAndCount",
+      "findOneOrFail",
+      "count",
+      "sum",
+      "average"
+    ],
+    "conditionMarker": "\\bwhere\\b",
+    "byIdMethods": [
+      "findOne",
+      "findOneOrFail"
+    ],
+    "byIdCondition": "where\\s*:\\s*\\{\\s*id\\b",
+    "afterFilter": "\\.filter\\s*\\(\\s*\\(?\\s*(\\w+)\\s*\\)?\\s*=>[^)]*\\b\\1\\.(?:{tenant})\\b"
+  },
+  "_comment_worktree": "Enlazar node_modules en vez de reinstalarlo: pesa cientos de megas, tarda minutos y es identico entre ramas de la misma rama base.",
+  "worktree": {
+    "prepare": [
+      {
+        "strategy": "link",
+        "paths": [
+          "node_modules"
+        ]
+      }
+    ]
+  }
+}

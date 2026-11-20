@@ -1,0 +1,49 @@
+{
+  "_comment": "Pack nextjs. Se instala en los repositorios que lo declaran en `packs`. Las reglas de anti-patrones viven en rules/antipatterns.js y las carga el motor del núcleo.",
+  "skills": [
+    {
+      "name": "nextjs-server-vs-client",
+      "title": "Servidor o cliente",
+      "description": "Decidir si un componente corre en servidor o en cliente en el App Router.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "nextjs-data-fetching",
+      "title": "Obtención de datos en el cliente",
+      "description": "Hooks de consulta y mutación: claves, caché e invalidación en Next.js.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "nextjs-create-component",
+      "title": "Crear un componente",
+      "description": "Crear un componente reutilizable y accesible.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "nextjs-bff-endpoint",
+      "title": "Endpoint del backend para el frontend",
+      "description": "Escribir un manejador de ruta que media entre el navegador y un servicio interno.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    }
+  ],
+  "agents": [],
+  "_comment_worktree": "Idem: node_modules enlazado. .next NO se enlaza, porque el build de una rama no sirve para otra.",
+  "worktree": {
+    "prepare": [
+      {
+        "strategy": "link",
+        "paths": [
+          "node_modules"
+        ]
+      }
+    ]
+  }
+}
