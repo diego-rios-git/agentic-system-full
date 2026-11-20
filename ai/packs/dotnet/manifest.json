@@ -1,0 +1,110 @@
+{
+  "_comment": "Pack dotnet. Perfil de lenguaje y anti-patrones para C# / .NET. No trae procedimientos todavia: el perfil y las reglas son lo que hace que los gates del nucleo dejen de ignorar los archivos .cs.",
+  "_comment_language": "Perfil de lenguaje. Lo consume scripts/lib/languages.js y con el trabajan todos los gates: anti-patrones, duplicacion, aislamiento por tenant y cobertura de escenarios. `ignorePaths` y `testPatterns` son expresiones regulares sobre la ruta relativa al repositorio, con barras normales.",
+  "language": {
+    "id": "dotnet",
+    "extensions": [
+      ".cs"
+    ],
+    "_comment_ignoreDirs": "TestResults lo genera `dotnet test`. bin y obj ya los saltea el nucleo, pero se repiten aca para que el perfil se entienda solo si alguien lo copia como base de otro.",
+    "ignoreDirs": [
+      "bin",
+      "obj",
+      "TestResults",
+      "packages"
+    ],
+    "_comment_ignorePaths": "Migrations de EF Core es un registro historico que solo crece: una migracion ya aplicada no se toca. Los .Designer.cs y .g.cs los escribe un generador.",
+    "ignorePaths": [
+      "(^|/)Migrations/",
+      "\\.Designer\\.cs$",
+      "\\.g\\.cs$",
+      "(^|/)Properties/AssemblyInfo\\.cs$"
+    ],
+    "_comment_testPatterns": "xUnit y NUnit no usan un sufijo de archivo como .spec: la convencion es el sufijo Tests en el nombre del archivo o del proyecto (Api.Tests/). Sensible a mayusculas a proposito: UsuarioTests.cs sigue la convencion y usuariotests.cs no.",
+    "testPatterns": [
+      "Tests?\\.cs$",
+      "(^|/)[Tt]ests?/",
+      "\\.Tests?(\\.|/)"
+    ],
+    "_comment_syntax": "rawStringPrefixes es lo que evita el falso negativo mudo: sin @\" declarado, un `var p = @\"C:\\temp\\\";` deja el rastreador de cadenas abierto y todo lo que sigue en esa linea se pierde para todas las reglas.",
+    "syntax": {
+      "lineComment": "//",
+      "stringDelimiters": [
+        "\"",
+        "'"
+      ],
+      "rawStringPrefixes": [
+        "@\"",
+        "$@\"",
+        "@$\"",
+        "\"\"\""
+      ]
+    },
+    "_comment_envAccess": "Como se lee la configuracion inyectable en .NET. Sin esto, la regla CORE-1.2 marca como cableada cualquier direccion local, incluso la que sale de appsettings.",
+    "envAccess": [
+      "IConfiguration",
+      "Configuration[",
+      "builder.Configuration",
+      "GetConnectionString",
+      "GetEnvironmentVariable",
+      "IOptions",
+      "IOptionsMonitor"
+    ],
+    "_comment_testTitles": "En xUnit el titulo no es una cadena: el test es un metodo decorado y su nombre ES el titulo. Se prefiere el DisplayName en prosa cuando esta, y si no se desarma el nombre del metodo (Rechaza_Un_Monto_Mayor -> 'Rechaza Un Monto Mayor') para poder compararlo con la frase del escenario.",
+    "testTitles": {
+      "strategy": "attribute-or-method",
+      "attributes": [
+        "Fact",
+        "Theory",
+        "Test",
+        "TestMethod",
+        "TestCase"
+      ],
+      "titleField": "DisplayName"
+    }
+  },
+  "skills": [
+    {
+      "name": "dotnet-feature-development",
+      "title": "Desarrollo de una funcionalidad en .NET",
+      "description": "Flujo estandar para una tarea de backend en .NET: que entender antes de escribir, la regla de dependencia entre proyectos, orden de creacion, por que el controlador no piensa, operaciones atomicas y tiempos de vida de la inyeccion de dependencias.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "dotnet-database-patterns",
+      "title": "Patrones de base de datos con EF Core",
+      "description": "Configuracion fluida de entidades, borrado logico con indices filtrados, orden de las columnas en un indice compuesto, transacciones y concurrencia optimista. Incluye los dos errores que no fallan sino que degradan en silencio: consultas de lectura sin AsNoTracking y el problema de N mas 1.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "dotnet-dto-patterns",
+      "title": "Contratos de entrada y salida en .NET",
+      "description": "Por que una entidad nunca se devuelve directamente, por que entrada y salida son tipos distintos, la diferencia entre campo opcional y campo nulo en una actualizacion parcial, y por que sin ApiController la validacion no rechaza nada.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "dotnet-error-handling",
+      "title": "Manejo de errores en .NET",
+      "description": "Codigos estables por dominio y fabrica de errores, que estado HTTP corresponde a cada situacion, por que un recurso ajeno devuelve 404 y no 403, que no exponer al cliente y por que capturar sin registrar convierte un incidente en un misterio.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "dotnet-create-migration",
+      "title": "Crear una migracion de EF Core",
+      "description": "Genera y aplica un cambio de esquema en el orden obligatorio: ver estado, aplicar pendientes, generar, revisar, aplicar, reportar. Incluye la compatibilidad con la ventana de despliegue y por que un renombre generado como borrar y crear pierde todos los datos. Solo con pedido explicito de la persona.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    }
+  ],
+  "agents": [],
+  "gates": []
+}

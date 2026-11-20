@@ -1,0 +1,49 @@
+{
+  "_comment": "Pack nextjs. Se instala en los repositorios que lo declaran en `packs`. Las reglas de anti-patrones viven en rules/antipatterns.js y las carga el motor del núcleo.",
+  "skills": [
+    {
+      "name": "nextjs-server-vs-client",
+      "title": "Servidor o cliente",
+      "description": "Decidir dónde corre cada componente en el App Router: cuándo hace falta cliente, cómo empujar la frontera hacia abajo en el árbol, qué implica que las propiedades se serialicen y por qué la autorización se decide del lado del servidor.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "nextjs-data-fetching",
+      "title": "Obtención de datos en el cliente",
+      "description": "Hooks de consulta y mutación: claves centralizadas, cuándo invalidar en vez de escribir la caché, y los errores cuyo síntoma no apunta a la causa, como un bucle de render sin peticiones de red o un esquema de cliente más estricto que el contrato.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "nextjs-create-component",
+      "title": "Crear un componente",
+      "description": "Componentes reutilizables y accesibles: buscar antes de crear, dónde van tipos y constantes, accesibilidad de teclado y estado, uso de la escala del sistema de diseño, textos traducibles y los cuatro estados que hay que cubrir.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "nextjs-bff-endpoint",
+      "title": "Endpoint del backend para el frontend",
+      "description": "Manejadores de ruta que median entre el navegador y los servicios internos: por qué el navegador nunca habla directo con la API, dónde vive el token de sesión, validación de entrada y mapeo de errores del servicio a respuestas que el cliente pueda usar.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    }
+  ],
+  "agents": [],
+  "_comment_worktree": "Idem: node_modules enlazado. .next NO se enlaza, porque el build de una rama no sirve para otra.",
+  "worktree": {
+    "prepare": [
+      {
+        "strategy": "link",
+        "paths": [
+          "node_modules"
+        ]
+      }
+    ]
+  }
+}

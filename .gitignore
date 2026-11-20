@@ -1,0 +1,36 @@
+# Dependencias
+node_modules/
+
+# Configuración personal — cada persona decide su propio nivel de permisos
+**/settings.local.json
+.env
+.env.*
+
+# Secretos
+*.pem
+*.key
+
+# Artefactos de proyectos generados: no pertenecen a la semilla.
+# Los punteros de harness son salida generada: se regeneran con
+# `consolidate-skills.js --wrappers`, nunca se versionan acá.
+ai/local/
+ai-workspace.json
+template.lock.json
+*-baseline.json
+.ai-gates-log.jsonl
+.claude/skills/
+.claude/agents/
+!.claude/settings.json
+!.claude/settings.local.json.example
+.opencode/
+
+# Salidas de prueba del init
+.tmp/
+test-output/
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

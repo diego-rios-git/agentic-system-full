@@ -1,0 +1,66 @@
+{
+  "_comment": "Pack openspec. Ciclo dirigido por especificacion. Requiere el CLI de OpenSpec y la estructura openspec/changes en cada repositorio.",
+  "skills": [
+    {
+      "name": "spec-scope-discipline",
+      "title": "Disciplina de alcance",
+      "description": "Reglas anti-inflacion que se aplican antes de generar una propuesta y antes de implementarla: umbrales por cantidad de tareas, que cuenta como fuera de alcance, y como partir un cambio buscando el limite natural en vez del punto medio.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "spec-propose",
+      "title": "Proponer un cambio",
+      "description": "Crea la propuesta de un cambio antes de escribir codigo: que problema resuelve, que queda afuera, el diseno como contrato auditable, los escenarios de aceptacion que deben poder convertirse en tests, y las decisiones abiertas señaladas como tales.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "spec-driven-testing",
+      "title": "Tests desde la especificacion",
+      "description": "Convierte los escenarios de aceptacion en tests antes de implementar, con la correspondencia de nombres que hace verificable la trazabilidad. Los tests deben fallar primero: un test verde en esa etapa es una alarma, no una buena noticia.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "spec-apply",
+      "title": "Implementar un cambio",
+      "description": "Ejecuta las tareas de un cambio ya disenado y con sus tests en rojo. El diseno manda: si no se puede cumplir, se corrige el diseno en vez de improvisar. Las tareas no crecen sin aprobacion, y una tarea se marca cuando esta verificada.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "spec-archive",
+      "title": "Archivar un cambio",
+      "description": "Cierra un cambio ya mergeado: verifica que este completo contra el codigo y no contra las casillas, y decide que del diseno pasa a ser la descripcion permanente del sistema. Un cambio activo que ya se mergeo es informacion falsa.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    }
+  ],
+  "agents": [
+    {
+      "name": "spec-agent",
+      "title": "Spec Agent",
+      "description": "Gestiona el ciclo de vida de un cambio dirigido por especificacion: proponer, disenar, implementar y archivar. Controla el alcance antes de escribir la propuesta, exige el diseno aprobado antes de implementar y señala las decisiones abiertas en vez de resolverlas por su cuenta.",
+      "mode": "subagent",
+      "model": "sonnet",
+      "state": "experimental"
+    }
+  ],
+  "gates": [],
+  "_comment_sdd": "Adaptador del ciclo dirigido por especificacion. El ciclo -proponer, disenar, escribir los tests, implementar, archivar- es una forma de trabajar y vive en los procedimientos; esto es lo unico especifico de OpenSpec. Cambiar de herramienta manana es escribir un pack con estas claves, sin tocar los procedimientos ni el gate. Ver scripts/lib/sdd.js.",
+  "sdd": {
+    "provider": "openspec",
+    "changesDir": "openspec/changes",
+    "archiveSegment": "archive",
+    "scenarioPattern": "^#{3,4}\\s+Scenario:\\s*(.+?)\\s*$",
+    "docExtension": ".md",
+    "cli": "openspec"
+  },
+  "_comment_gates": "El gate de cobertura de escenarios subio al nucleo (scripts/check-scenario-coverage.js): verifica el contrato, no OpenSpec, y sale con 0 cuando ningun pack declara proveedor."
+}

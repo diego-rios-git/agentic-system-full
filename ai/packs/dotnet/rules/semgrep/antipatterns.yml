@@ -1,0 +1,31 @@
+# Reglas estructurales de .NET.
+#
+# Solo entra acá lo que una expresión regular por línea NO puede ver, porque
+# depende de la forma del código y no de su texto. Todo lo que se pueda detectar
+# mirando una línea va en `ai/packs/dotnet/rules/antipatterns.js`, que no
+# necesita que nadie instale nada.
+#
+# Cada regla se probó contra un fixture que debe marcar y uno que no debe
+# marcar, como exige `ai/core/procedures/gate-from-finding.md`. Ninguna se dio
+# por buena solo porque el YAML no tira error de sintaxis, y las que no pasaron
+# esa prueba no están acá: quedaron anotadas en `ai/gate-candidates.md` con el
+# motivo. Una regla ruidosa no cuesta un falso positivo, cuesta el gate entero —
+# el equipo aprende a ignorar los avisos y deja de mirar también los buenos.
+
+rules:
+  - id: NET-2.1-get-que-escribe
+    languages: [csharp]
+    severity: ERROR
+    message: >-
+      Un endpoint declarado como lectura (HttpGet) guarda cambios en la base. Un
+      GET tiene que poder repetirse sin consecuencias: los clientes, los proxies
+      y los reintentos automáticos lo dan por sentado, y un reintento de red
+      termina aplicando el efecto dos veces. Si la operación cambia estado, va en
+      POST, PUT o PATCH.
+    patterns:
+      - pattern-inside: |
+          [HttpGet(...)]
+          $RET $M(...) { ... }
+      - pattern-either:
+          - pattern: $CTX.SaveChanges(...)
+          - pattern: await $CTX.SaveChangesAsync(...)

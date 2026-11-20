@@ -1,0 +1,77 @@
+{
+  "_comment": "Pack nestjs. Se instala en los repositorios que lo declaran en `packs`. Las reglas de anti-patrones viven en rules/antipatterns.js y las carga el motor del núcleo.",
+  "skills": [
+    {
+      "name": "nestjs-module-development",
+      "title": "Desarrollo de un módulo NestJS",
+      "description": "Flujo estándar para una tarea de backend en NestJS: qué entender antes de escribir, estructura del módulo, orden de creación de archivos, validación en el borde, operaciones atómicas y registro en el módulo.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "nestjs-database-patterns",
+      "title": "Patrones de base de datos con TypeORM",
+      "description": "Entidades, relaciones, borrado lógico, restricciones de unicidad, índices compuestos, transacciones y concurrencia optimista. Incluye los errores que el código no delata a simple vista, como usar el repositorio inyectado dentro de una transacción.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "nestjs-dto-patterns",
+      "title": "Patrones de DTO",
+      "description": "Contrato de entrada y salida de la API: validación en el borde, por qué una entidad nunca se devuelve directamente, la diferencia entre campo opcional y campo nulo, y por qué el nullable declarado tiene que coincidir con la realidad.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "nestjs-error-handling",
+      "title": "Manejo de errores",
+      "description": "Catálogo de códigos estables y fábrica de errores por módulo, qué estado HTTP corresponde a cada situación, qué no exponer al cliente y por qué capturar un error sin registrarlo convierte un incidente en un misterio.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "nestjs-create-migration",
+      "title": "Crear una migración",
+      "description": "Genera y aplica una migración de esquema en el orden obligatorio: ver estado, aplicar pendientes, generar, revisar, aplicar, reportar. Solo con pedido explícito de la persona. Incluye la compatibilidad con la ventana de despliegue.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    }
+  ],
+  "agents": [],
+  "_comment_tenant": "Dialecto de consulta de TypeORM, para el gate del pack multi-tenant. Vive aca y no dentro del script porque describe como se ve una consulta en ESTE ORM: un proyecto con EF Core, Dapper, Prisma o Mongo declara el suyo en el pack de su stack. Solo se usa si el pack multi-tenant tambien esta instalado.",
+  "tenant": {
+    "dialect": "typeorm",
+    "readMethods": [
+      "find",
+      "findOne",
+      "findAndCount",
+      "findOneOrFail",
+      "count",
+      "sum",
+      "average"
+    ],
+    "conditionMarker": "\\bwhere\\b",
+    "byIdMethods": [
+      "findOne",
+      "findOneOrFail"
+    ],
+    "byIdCondition": "where\\s*:\\s*\\{\\s*id\\b",
+    "afterFilter": "\\.filter\\s*\\(\\s*\\(?\\s*(\\w+)\\s*\\)?\\s*=>[^)]*\\b\\1\\.(?:{tenant})\\b"
+  },
+  "_comment_worktree": "Enlazar node_modules en vez de reinstalarlo: pesa cientos de megas, tarda minutos y es identico entre ramas de la misma rama base.",
+  "worktree": {
+    "prepare": [
+      {
+        "strategy": "link",
+        "paths": [
+          "node_modules"
+        ]
+      }
+    ]
+  }
+}

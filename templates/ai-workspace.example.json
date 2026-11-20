@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "project": {
+    "name": "mi-proyecto",
+    "title": "Mi Proyecto",
+    "ticketPrefix": "ABC",
+    "language": "es"
+  },
+  "_comment_topology": "multi-repo: la base vive en la raíz y los repositorios de aplicación se clonan adentro. single-repo: la base convive con el código en el mismo repositorio, y `repos` tiene una sola entrada con path \".\".",
+  "topology": "multi-repo",
+  "repos": [
+    {
+      "name": "mi-api",
+      "path": "mi-api",
+      "packs": [
+        "nestjs"
+      ],
+      "baseBranch": "develop",
+      "testCommand": "npm test",
+      "typecheckCommand": "npx tsc --noEmit"
+    },
+    {
+      "name": "mi-app",
+      "path": "mi-app",
+      "packs": [
+        "nextjs"
+      ],
+      "baseBranch": "develop",
+      "testCommand": "npm test",
+      "typecheckCommand": "npx tsc --noEmit"
+    }
+  ],
+  "_comment_packs": "Packs que aplican a todo el workspace, no a un repositorio en particular.",
+  "packs": [],
+  "harnesses": [
+    "claude",
+    "opencode",
+    "agents-md"
+  ],
+  "worktrees": {
+    "enabled": true,
+    "dir": "worktrees",
+    "slots": [
+      "implementation-1",
+      "implementation-2",
+      "review"
+    ]
+  },
+  "_comment_tenant": "Solo con el pack multi-tenant instalado: nombre de la columna que aísla los datos de cada cliente.",
+  "tenant": {
+    "column": "tenant_id"
+  }
+}
