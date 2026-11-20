@@ -1,0 +1,741 @@
+{
+  "_comment": "Activos del núcleo: se instalan en todo proyecto, sin importar el stack. El contenido de cada entrada vive en procedures/<name>.md o agents/<name>.md de esta misma carpeta.",
+  "skills": [
+    {
+      "name": "code-professor",
+      "title": "Code Professor",
+      "description": "Explicar un cambio de código de forma educativa: qué se hizo, por qué y qué mirar.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "validado"
+    },
+    {
+      "name": "git-commit-workflow",
+      "title": "Git Commit Workflow",
+      "description": "Commitear. Solo con pedido explícito de la persona; no hace nada más.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "validado"
+    },
+    {
+      "name": "create-branch",
+      "title": "Create Branch",
+      "description": "Crear una rama con la nomenclatura del proyecto, partiendo de su rama base.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "validado"
+    },
+    {
+      "name": "gate-from-finding",
+      "title": "De un error encontrado a un gate que lo impide",
+      "description": "Convertir un error confirmado en una verificación automática que lo impida.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "validado"
+    },
+    {
+      "name": "pr-review",
+      "title": "PR Review",
+      "description": "Revisar un cambio completo en modo A (rama actual), S (slot en su lugar) o C (rama ajena en el slot review): checks y gates una vez, agentes en paralelo, hallazgos verificados.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.1",
+      "state": "validado"
+    },
+    {
+      "name": "worktree-slots",
+      "title": "Slots de worktree",
+      "description": "Abrir, promover, liberar o cerrar un slot de trabajo o de revisión; flujo slot → principal → PR.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.1",
+      "state": "validado"
+    },
+    {
+      "name": "project-loader",
+      "title": "Cargar el proyecto",
+      "description": "Cargar el contexto del proyecto por primera vez, después de instalar la base.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "task-estimation",
+      "title": "Task Estimation",
+      "description": "Estimar el esfuerzo de un requisito: complejidad 1-10, horas por capa y QA en 3 niveles, con reglas deterministas. Agnóstico de stack.",
+      "compatibility": "Run from the workspace root. Solo lectura de documentos.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "project-estimation",
+      "title": "Project Estimation",
+      "description": "Estimar un proyecto o frente de trabajo: WBS, escenarios mín/probable/máx, esfuerzo aparte del plazo, riesgos y un informe comercial trazable.",
+      "compatibility": "Run from the workspace root. Solo lectura del proyecto; escribe el informe.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "shared-dependencies",
+      "title": "Dependencias compartidas con los slots",
+      "description": "Guia para adaptar al proyecto: medir que operacion vacia el directorio de dependencias enlazado antes de blindarla, y dejar el resultado en ai/local.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "domain-gate",
+      "title": "Gate de dominio",
+      "description": "Armar un gate que verifica una política de dominio (dinero, fechas con zona, datos personales): una regla escrita, un clasificador de nombres por tokens y un gate con fixtures.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "shadow-migration",
+      "title": "Generar migraciones contra una base descartable",
+      "description": "Guía para adaptar el método sombra a la pila del proyecto: base compartida entre el principal y los slots, ORM y motor propios, cómo verificarlo y dónde dejarlo.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "cerrar-ticket",
+      "title": "Cerrar un ticket",
+      "description": "Del promote al merge, en orden y con un único punto de control antes de lo irreversible (esqueleto: sin primera corrida guiada).",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "git-sync-branch",
+      "title": "Sincronizar la rama con su base",
+      "description": "Traer la base a la rama antes del review y del PR: fetch y merge, sin pull ni rebase; frena ante árbol sucio, conflictos o migraciones.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "ciclo-de-tarea",
+      "title": "Ciclo de una tarea",
+      "description": "Llevar una tarea de pendiente a archivada: requisito, propuesta, tests en rojo, implementación, revisión, prueba de punta a punta, automejora y archivo.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "trabajo-autonomo",
+      "title": "Trabajo autónomo",
+      "description": "Recorrer las tareas de un plan sin parar a preguntar, con revisión sin contexto y una bitácora de decisiones conservadoras. Solo con pedido expreso.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "redactar-requisito",
+      "title": "Redactar un requisito",
+      "description": "Entrevistar por rondas y escribir la ficha de un requisito en EARS, con escenarios DADO/CUANDO/ENTONCES y decisiones abiertas explícitas.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "resumen-humano",
+      "title": "Resumen humano de un documento",
+      "description": "Traducir un documento largo escrito por IA en un resumen que una persona lee entero: sin siglas sueltas, con ejemplos numéricos y lo no definido declarado.",
+      "compatibility": "Run from the workspace root. Solo lectura del fuente.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "tracker-events",
+      "title": "Eventos del tracker",
+      "description": "El contrato de los cuatro momentos en que se toca una tarjeta (explorar, rama creada, PR creado, historia completa); sin tracker, la ficha del tablero.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    },
+    {
+      "name": "prueba-e2e",
+      "title": "Prueba de punta a punta",
+      "description": "Verificar un cambio contra la aplicacion real levantada, solo en la principal: guia del proyecto, plan, datos por el producto, script, codigo viejo, capturas y lecciones.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    }
+  ],
+  "_comment_agents": "Arquetipos: funcionan sobre cualquier repositorio declarado. Los patrones de stack los aportan los procedimientos del pack, no el agente. `mode: primary` es punto de entrada de sesión y por eso no fija modelo: quien abre la sesión ya lo eligió.",
+  "agents": [
+    {
+      "name": "workspace-router",
+      "title": "Workspace Router",
+      "description": "Punto de entrada en la raíz del workspace: decide a qué repositorio va la tarea.",
+      "mode": "primary",
+      "filenames": {
+        "opencode": "workspace"
+      },
+      "state": "validado"
+    },
+    {
+      "name": "qa-agent",
+      "title": "QA Agent",
+      "description": "Auditar el código de la rama contra el diseño acordado y los criterios de aceptación.",
+      "mode": "subagent",
+      "model": "opus",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": true
+      },
+      "state": "validado"
+    },
+    {
+      "name": "code-reviewer",
+      "title": "Code Reviewer",
+      "description": "Revisar corrección, arquitectura, rendimiento, mantenibilidad y tests de un cambio.",
+      "mode": "subagent",
+      "model": "opus",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": true
+      },
+      "state": "validado"
+    },
+    {
+      "name": "security-auditor",
+      "title": "Security Auditor",
+      "description": "Auditar autorización, aislamiento entre clientes, secretos y entrada no confiable.",
+      "mode": "subagent",
+      "model": "opus",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": true
+      },
+      "state": "validado"
+    },
+    {
+      "name": "project-setup-agent",
+      "title": "Project Setup Agent",
+      "description": "Convertir un resumen del proyecto en brief, glosario, reglas y datos sensibles.",
+      "mode": "subagent",
+      "model": "opus",
+      "state": "experimental"
+    }
+  ],
+  "_comment_language": "Perfil de lenguaje del nucleo. Esta aca y no en un pack porque los scripts de la propia base son JavaScript: sin este perfil, el hook de escritura no cubriria ni sus propios gates. Un repositorio que no quiera este perfil lo excluye con `languages` en ai-workspace.json. Ver scripts/lib/languages.js.",
+  "language": {
+    "id": "javascript",
+    "extensions": [
+      ".ts",
+      ".tsx",
+      ".js",
+      ".jsx",
+      ".mjs",
+      ".cjs",
+      ".mts",
+      ".cts"
+    ],
+    "ignoreDirs": [
+      ".next",
+      ".turbo",
+      ".nuxt",
+      ".svelte-kit",
+      "storybook-static"
+    ],
+    "ignorePaths": [
+      "(^|/)migrations?/",
+      "(^|/)__?generated__?/",
+      "\\.d\\.ts$"
+    ],
+    "testPatterns": [
+      "\\.(spec|test)\\.[cm]?[jt]sx?$",
+      "(^|/)(tests?|__tests__|__mocks__|e2e)/"
+    ],
+    "syntax": {
+      "lineComment": "//",
+      "stringDelimiters": [
+        "\"",
+        "'",
+        "`"
+      ]
+    },
+    "envAccess": [
+      "process.env",
+      "import.meta.env",
+      "configService",
+      "getOrThrow"
+    ],
+    "testTitles": {
+      "strategy": "callback",
+      "functions": [
+        "it",
+        "test"
+      ]
+    },
+    "imports": {
+      "patterns": [
+        "\\bfrom\\s*['\"]([^'\"\\n]+)['\"]",
+        "\\bimport\\s*['\"]([^'\"\\n]+)['\"]",
+        "\\b(?:import|require)\\s*\\(\\s*['\"]([^'\"\\n]+)['\"]"
+      ],
+      "relative": true,
+      "aliases": [],
+      "indexFiles": [
+        "index"
+      ]
+    },
+    "entrypoints": [
+      "(^|/)(bin|scripts)/",
+      "(^|/)[^/]+\\.config\\.[cm]?[jt]s$",
+      "(^|/)\\.[\\w-]+rc\\.[cm]?js$",
+      "^(src/)?(index|main)\\.[cm]?[jt]sx?$"
+    ]
+  },
+  "_comment_gates": "Verificaciones automáticas del núcleo. Las consumen el hook de escritura y el orquestador de review desde el mismo registro: agregar un gate acá lo activa en los dos caminos.",
+  "gates": [
+    {
+      "id": "context-links",
+      "label": "rutas citadas",
+      "script": "scripts/check-context-links.js",
+      "source": "una ruta que no existe hace que el agente improvise en vez de fallar",
+      "scope": "workspace",
+      "appliesTo": {
+        "extensions": [
+          ".md",
+          ".json",
+          ".yaml",
+          ".yml"
+        ],
+        "paths": [
+          "ai/",
+          ".claude/",
+          ".opencode/",
+          "docs/",
+          "CLAUDE.md",
+          "AGENTS.md"
+        ]
+      },
+      "args": [
+        "--scope",
+        "workspace",
+        "--baseline"
+      ]
+    },
+    {
+      "id": "antipatterns",
+      "label": "anti-patrones",
+      "script": "scripts/check-antipatterns.js",
+      "source": "las reglas las aportan el núcleo y los packs instalados",
+      "scope": "repo",
+      "appliesTo": {
+        "extensions": [
+          ".ts",
+          ".tsx",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".cjs"
+        ]
+      },
+      "args": [
+        "--repo",
+        "{repo}",
+        "--baseline"
+      ],
+      "fileArgs": [
+        "--repo",
+        "{repo}",
+        "--target",
+        "{rel}",
+        "--baseline"
+      ]
+    },
+    {
+      "id": "duplication",
+      "label": "código duplicado",
+      "script": "scripts/check-duplication.js",
+      "source": "jscpd — extraer a un módulo compartido en vez de repetir",
+      "scope": "repo",
+      "_comment_onWrite": "Fuera del hook de escritura: jscpd necesita al menos dos archivos para detectar un clon, así que no puede acotarse al archivo editado. Barrer el repositorio entero en cada edición excede el tiempo límite del hook, con lo cual el gate aparentaba correr sin correr. Sigue corriendo en run-gates.js.",
+      "onWrite": false,
+      "appliesTo": {
+        "extensions": [
+          ".ts",
+          ".tsx",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".cjs"
+        ]
+      },
+      "args": [
+        "--repo",
+        "{repo}",
+        "--baseline"
+      ]
+    },
+    {
+      "id": "semgrep",
+      "label": "reglas estructurales",
+      "script": "scripts/check-semgrep.js",
+      "source": "lo que una expresion regular por linea no puede ver: la forma del codigo",
+      "scope": "repo",
+      "_comment_onWrite": "Fuera del hook de escritura: semgrep arranca un proceso propio y tarda segundos, lo que excede el tiempo limite del hook en cada edicion. Sigue corriendo en run-gates.js.",
+      "onWrite": false,
+      "_comment_opcional": "Semgrep no es una dependencia de la base. Sin reglas declaradas el gate sale con 0 y lo dice; con reglas declaradas y la herramienta ausente sale con 2, nunca con 0.",
+      "args": [
+        "--repo",
+        "{repo}",
+        "--baseline"
+      ]
+    },
+    {
+      "id": "scenario-coverage",
+      "label": "cobertura de escenarios",
+      "script": "scripts/check-scenario-coverage.js",
+      "source": "cada escenario de aceptacion necesita su test",
+      "scope": "repo",
+      "_comment": "Sale con 0 cuando ningun pack declara un ciclo dirigido por especificacion: no hay nada que verificar. El proveedor -donde viven los documentos, como se marca un escenario- es un dato del pack. Ver scripts/lib/sdd.js.",
+      "onWrite": false,
+      "args": [
+        "--repo",
+        "{repo}"
+      ],
+      "baseline": false,
+      "_comment_baseline": "Sin baseline a proposito: un escenario sin test no es deuda que convenga congelar."
+    },
+    {
+      "id": "cochange",
+      "label": "co-cambio de derivados",
+      "script": "scripts/check-cochange.js",
+      "source": "quien toca X regenera Y: reglas `coChange` de los manifests (lockfile, captura de referencia, cliente generado)",
+      "scope": "repo",
+      "needs": [
+        "coChange"
+      ],
+      "onWrite": false,
+      "appliesTo": {},
+      "args": [
+        "--repo",
+        "{repo}"
+      ],
+      "baseline": false,
+      "_comment": "Mira el CONJUNTO de archivos del cambio contra origin/<baseBranch>: no puede acotarse a un archivo, por eso onWrite:false. Sin reglas coChange declaradas el orquestador lo muestra como NO CORRIÓ. Sin baseline: un derivado desactualizado no es deuda que convenga congelar."
+    },
+    {
+      "id": "unreachable",
+      "label": "código que nadie importa (nuevo o editado)",
+      "script": "scripts/check-unreachable-code.js",
+      "source": "UNREACH-1 isla nueva · UNREACH-2 archivo editado que solo importan los tests: ¿alguien puede llegar a esto?",
+      "scope": "repo",
+      "needs": [
+        "imports"
+      ],
+      "onWrite": false,
+      "appliesTo": {},
+      "args": [
+        "--repo",
+        "{repo}"
+      ],
+      "baseline": false,
+      "_comment": "Necesita que el perfil de lenguaje del repo declare `imports` (ver languageProfilePatches). Sin eso NO CORRIÓ (visible), no 'limpio'. Mira el diff contra la base: onWrite:false. Sin baseline: solo habla de lo que el cambio agrega o edita."
+    },
+    {
+      "id": "encoding",
+      "label": "codificación del texto (mojibake)",
+      "script": "scripts/check-encoding.js",
+      "source": "ENC-1.1: un matcher con la tilde rota nunca coincide y el test pasa sin probar nada",
+      "scope": "repo",
+      "appliesTo": {},
+      "args": [
+        "--repo",
+        "{repo}",
+        "--baseline"
+      ],
+      "fileArgs": [
+        "--repo",
+        "{repo}",
+        "--target",
+        "{rel}",
+        "--baseline"
+      ],
+      "baseline": true,
+      "_comment": "Corre sobre TODO archivo de texto versionado (md, py, cs, json, ts…), no solo código: sin appliesTo.extensions. Con baseline."
+    },
+    {
+      "id": "verify-rules",
+      "label": "fixtures de las reglas",
+      "script": "scripts/verify-rules.js",
+      "source": "toda regla activa del motor de anti-patrones trae un fixture que marca y uno que no marca",
+      "scope": "repo",
+      "onWrite": false,
+      "appliesTo": {},
+      "args": [
+        "--repo",
+        "{repo}"
+      ],
+      "baseline": false,
+      "_comment": "ATENCIÓN: hoy marca NEST-2.1 (regla estructural del pack nestjs sin fixtures). Antes de declararlo, agregar los fixtures de árbol que se proponen en el informe (Pedidos), o el repo con el pack nestjs sale con 1."
+    },
+    {
+      "id": "gate-candidates",
+      "label": "registro de candidatos a gate",
+      "script": "scripts/check-gate-candidates.js",
+      "source": "ai/gate-candidates.md: estado válido, descartados con motivo, implementados que referencian algo que existe",
+      "scope": "workspace",
+      "needs": [
+        "gateCandidates"
+      ],
+      "appliesTo": {
+        "extensions": [
+          ".md"
+        ],
+        "paths": [
+          "ai/gate-candidates.md"
+        ]
+      },
+      "args": [],
+      "baseline": false,
+      "_comment": "Workspace: no recibe --repo. `needs: gateCandidates` lo muestra como NO CORRIÓ en un proyecto que no tiene el registro."
+    },
+    {
+      "id": "requirements",
+      "label": "tablero de requisitos",
+      "script": "scripts/check-requirements.js",
+      "source": "un estado de requisito escrito a mano envejece en silencio; un change sin rf: deja la ficha en cerrado con trabajo pendiente",
+      "scope": "workspace",
+      "onWrite": false,
+      "appliesTo": {
+        "extensions": [
+          ".md",
+          ".yaml",
+          ".yml"
+        ]
+      },
+      "args": [],
+      "baseline": false,
+      "_comment_when": "Condicion pedida: el gate solo aplica si ai-workspace.json declara `requirements` (misma forma que hooks.when.config). Si gates.js todavia no soporta `when`, no pasa nada grave: el script sale 0 diciendo 'No aplica ... No se verifico nada' (y [] con --json) cuando no hay tablero, y nunca simula una verificacion. onWrite:false porque recorre todas las fichas y todos los changes de todos los repos: no se puede acotar a un archivo.",
+      "_comment_appliesTo": "Sin `paths` a proposito: la carpeta de fichas la declara cada proyecto en requirements.dir y no se conoce al escribir el manifest. Con onWrite:false el filtro de archivo no se usa en el hook; run-gates.js lo corre siempre.",
+      "needs": [
+        "requirements"
+      ],
+      "_comment": "`needs: requirements` lo muestra como NO CORRIÓ en un proyecto sin tablero, en vez de un \"sin hallazgos\" que no verificó nada.",
+      "when": {
+        "config": "requirements"
+      }
+    }
+  ],
+  "_comment_hooks": "Hooks del nucleo, en eventos NEUTRALES (pre-write, post-write, pre-bash). Cada harness los traduce segun su bloque `hooks` de template.manifest.json y `consolidate-skills.js --wrappers` los registra: nadie edita a mano `.claude/settings.json`. Ver scripts/lib/hooks.js. Los opcionales se encienden con `hooks.<id>.enabled: true` en ai-workspace.json; cualquiera se apaga con `enabled: false`.",
+  "hooks": [
+    {
+      "id": "pre-write-secrets",
+      "event": "pre-write",
+      "script": "scripts/hooks/pre-write-secrets.js",
+      "timeout": 15,
+      "source": "un secreto pegado en un archivo queda en el historial de git: el control va ANTES de que toque el disco"
+    },
+    {
+      "id": "post-edit-checks",
+      "event": "post-write",
+      "script": "scripts/hooks/post-edit-checks.js",
+      "timeout": 30,
+      "source": "el feedback llegaba tarde, en el PR: se corre el gate que corresponde al archivo en el mismo turno en que se escribe"
+    },
+    {
+      "id": "pre-write-protected",
+      "event": "pre-write",
+      "script": "scripts/hooks/pre-write-protected.js",
+      "timeout": 10,
+      "when": {
+        "manifest": "protectedPaths"
+      },
+      "source": "un archivo generado (migracion, lockfile, cliente) escrito o editado a mano no falla: se descubre sobre datos reales"
+    },
+    {
+      "id": "pre-bash-slot-deps",
+      "event": "pre-bash",
+      "script": "scripts/hooks/pre-bash-slot-deps.js",
+      "timeout": 10,
+      "when": {
+        "worktrees": true
+      },
+      "source": "reinstalar o borrar dependencias dentro de un slot las destruye en el repositorio principal, que comparte el directorio por enlace"
+    },
+    {
+      "id": "pre-bash-slot-migrations",
+      "event": "pre-bash",
+      "script": "scripts/hooks/pre-bash-slot-migrations.js",
+      "timeout": 10,
+      "when": {
+        "worktrees": true,
+        "repoField": "database"
+      },
+      "source": "la base es una sola para el repositorio principal y todos los slots: dos ramas que migran sobre ella se pisan"
+    },
+    {
+      "id": "pre-commit-attribution",
+      "event": "pre-bash",
+      "script": "scripts/hooks/pre-commit-attribution.js",
+      "timeout": 10,
+      "when": {
+        "config": "commits.forbidAiAttribution"
+      },
+      "source": "la politica de no firmar commits con una IA competia con lo que el harness pedia en medio de la sesion; la regla escrita perdia"
+    },
+    {
+      "id": "pre-commit-gates",
+      "event": "pre-bash",
+      "script": "scripts/hooks/pre-commit-gates.js",
+      "timeout": 240,
+      "when": {
+        "config": "hooks.pre-commit-gates.enabled"
+      },
+      "source": "los gates corren antes de commitear y no despues, en el PR"
+    },
+    {
+      "id": "pre-bash-heredoc",
+      "event": "pre-bash",
+      "script": "scripts/hooks/pre-bash-heredoc.js",
+      "timeout": 10,
+      "when": {
+        "config": "hooks.pre-bash-heredoc.enabled"
+      },
+      "source": "un heredoc en la shell de Windows corrompe el mensaje o el contenido sin avisar"
+    },
+    {
+      "id": "pre-bash-protected",
+      "event": "pre-bash",
+      "script": "scripts/hooks/pre-write-protected.js",
+      "timeout": 10,
+      "when": {
+        "manifest": "protectedPaths",
+        "config": "hooks.pre-bash-protected.enabled"
+      },
+      "source": "un archivo generado se puede reescribir por la shell sin pasar por Edit/Write; el hook de escritura no lo ve"
+    }
+  ],
+  "_comment_statusLine": "Status line de la base: slot en el que se trabaja, ramas, modelo con effort, contexto y costo. La registra consolidate-skills solo si el proyecto no tiene una propia.",
+  "statusLine": {
+    "script": "scripts/statusline.js",
+    "when": {
+      "worktrees": true
+    }
+  },
+  "_comment_depsProfiles": "Perfiles de directorio de dependencias compartido entre el repositorio principal y sus slots. Un slot enlaza ese directorio en vez de reinstalarlo; el riesgo es que una operacion destructiva dentro del slot atraviese el enlace y vacie el del principal. Que operacion destruye y cual no se MIDE, no se supone: ver ai/core/procedures/worktree-slots.md. Un pack referencia un perfil con `worktree.deps.profile`; un repositorio sin pack lo declara en `repos[].deps`. Lo especifico de cada gestor (que subcomando reinstala) es DATO aca, no codigo en los hooks.",
+  "depsProfiles": {
+    "node": {
+      "title": "Node (npm, pnpm, yarn)",
+      "dir": "node_modules",
+      "lockfile": "package-lock.json",
+      "managers": [
+        "npm",
+        "npm.cmd",
+        "pnpm",
+        "pnpm.cmd",
+        "yarn",
+        "yarn.cmd"
+      ],
+      "destructiveSubcommands": [
+        "ci",
+        "install",
+        "i",
+        "add",
+        "remove",
+        "rm",
+        "uninstall",
+        "rebuild",
+        "prune",
+        "dedupe",
+        "update",
+        "up",
+        "upgrade"
+      ],
+      "safeSubcommands": [
+        "run",
+        "run-script",
+        "test",
+        "exec",
+        "ls",
+        "list",
+        "outdated",
+        "audit",
+        "view",
+        "why",
+        "start"
+      ],
+      "health": {
+        "kind": "node-modules",
+        "binDir": ".bin",
+        "minBin": 20,
+        "manifest": "package.json"
+      },
+      "repair": "npm ci"
+    },
+    "python": {
+      "title": "Python (pip, uv, poetry)",
+      "dir": ".venv",
+      "lockfile": "requirements.txt",
+      "managers": [
+        "pip",
+        "pip3",
+        "uv",
+        "poetry",
+        "pipenv",
+        "pdm"
+      ],
+      "destructiveSubcommands": [
+        "install",
+        "uninstall",
+        "sync",
+        "add",
+        "remove",
+        "update",
+        "upgrade",
+        "lock"
+      ],
+      "safeSubcommands": [
+        "run",
+        "list",
+        "show",
+        "freeze",
+        "check",
+        "tree"
+      ],
+      "health": {
+        "kind": "python-venv",
+        "binDir": "bin",
+        "altBinDir": "Scripts"
+      },
+      "repair": "pip install -r requirements.txt"
+    },
+    "php": {
+      "title": "PHP (Composer)",
+      "dir": "vendor",
+      "lockfile": "composer.lock",
+      "managers": [
+        "composer",
+        "composer.phar"
+      ],
+      "destructiveSubcommands": [
+        "install",
+        "update",
+        "require",
+        "remove",
+        "dump-autoload"
+      ],
+      "safeSubcommands": [
+        "show",
+        "validate",
+        "outdated",
+        "audit",
+        "run-script",
+        "run"
+      ],
+      "health": {
+        "kind": "php-vendor",
+        "autoload": "autoload.php"
+      },
+      "repair": "composer install"
+    }
+  }
+}

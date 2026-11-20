@@ -1,0 +1,37 @@
+{
+  "_comment": "Pack e2e. Guia para armar el kit e2e del proyecto y un linter de scripts e2e que no los ejecuta (Python y JS/TS), configurable con `e2e` en ai-workspace.json.",
+  "skills": [
+    {
+      "name": "armar-kit-e2e",
+      "title": "Armar el kit de pruebas de punta a punta",
+      "description": "Guia para que un agente sin contexto arme la guia, los helpers, la plantilla y la configuracion del linter e2e del proyecto, en su stack.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    }
+  ],
+  "agents": [],
+  "gates": [
+    {
+      "id": "e2e-scripts",
+      "label": "scripts e2e",
+      "script": "ai/packs/e2e/scripts/check-e2e-scripts.js",
+      "source": "lecciones de las pruebas de punta a punta: espera fija, llamadas que se cuelgan, fecha sin zona, texto de pagina entera, proceso sin cierre, escritura directa en la base, datos de una base ajena",
+      "scope": "workspace",
+      "onWrite": false,
+      "appliesTo": {
+        "extensions": [
+          ".py",
+          ".js",
+          ".mjs",
+          ".cjs",
+          ".ts",
+          ".md"
+        ]
+      },
+      "args": [],
+      "baseline": false,
+      "_comment": "Sin `e2e` en ai-workspace.json el script dice NO APLICA y sale 0 (explicito en stdout). Con `e2e` mal formado, o con la carpeta inexistente, sale 2. Lee la config solo: no necesita {repo} ni {scope}."
+    }
+  ]
+}
