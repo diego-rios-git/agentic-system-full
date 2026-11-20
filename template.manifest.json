@@ -1,0 +1,488 @@
+{
+  "template": {
+    "name": "agentic-system",
+    "version": "1.2.0",
+    "repository": "https://github.com/Openix-AS/agentic-system",
+    "description": "Base de trabajo con IA para arrancar un proyecto: agentes, reglas, patrones, revisiones y verificaciones automaticas."
+  },
+  "_comment_ownership": "Frontera de propiedad. Lo declarado en `template` lo actualiza template-sync; lo declarado en `project` no se toca NUNCA. Un archivo que no matchee ninguno de los dos se reporta como no clasificado.",
+  "ownership": {
+    "template": [
+      "ai/core/**",
+      "ai/packs/**",
+      "scripts/**",
+      "docs/**",
+      "templates/**",
+      "init.js",
+      "template.manifest.json",
+      "VERSION",
+      "CHANGELOG.md",
+      "CONTRIBUTING.md"
+    ],
+    "project": [
+      "ai/local/**",
+      "ai-workspace.json",
+      "template.lock.json",
+      "CLAUDE.md",
+      "AGENTS.md",
+      "README.md",
+      "INVENTORY.md",
+      ".*-baseline.json",
+      "**/settings.local.json",
+      ".claude/**",
+      ".opencode/**",
+      "ai/gate-candidates.md"
+    ]
+  },
+  "_comment_harnesses": "Catalogo de harnesses. El contenido vive UNA vez en ai/; lo que un harness recibe es una proyeccion con el frontmatter que esa herramienta espera. El harness NO es indispensable: un proyecto puede declarar \"harnesses\": [] y el sistema funciona igual. Agregar una herramienta que la base no conoce -Cursor, Windsurf, la que sea- NO requiere tocar codigo: se declara el mismo bloque en `harnessDefinitions` de ai-workspace.json. Ver docs/agregar-un-harness.md y scripts/lib/harnesses.js.",
+  "harnesses": {
+    "claude": {
+      "title": "Claude Code",
+      "output": ".claude/",
+      "generated": true,
+      "skillsDir": ".claude/skills",
+      "skillFile": "SKILL.md",
+      "agentsDir": ".claude/agents",
+      "_comment_frontmatter": "Claude Code no tiene un `edit: false`: si se omite `tools`, el agente hereda todas. Por eso readOnlyTools enumera las permitidas, para que la restriccion sea real.",
+      "frontmatter": {
+        "description": "block",
+        "mode": false,
+        "tools": "list",
+        "readOnlyTools": [
+          "Read",
+          "Grep",
+          "Glob",
+          "Bash",
+          "WebFetch",
+          "WebSearch"
+        ],
+        "model": "alias"
+      },
+      "hooks": {
+        "format": "claude-settings",
+        "file": ".claude/settings.json",
+        "events": {
+          "pre-write": {
+            "event": "PreToolUse",
+            "matcher": "Edit|Write"
+          },
+          "post-write": {
+            "event": "PostToolUse",
+            "matcher": "Edit|Write"
+          },
+          "pre-bash": {
+            "event": "PreToolUse",
+            "matcher": "Bash"
+          }
+        },
+        "command": "node \"$CLAUDE_PROJECT_DIR/{script}\" --ai-managed",
+        "statusLine": true,
+        "_comment": "Ruta con $CLAUDE_PROJECT_DIR y no relativa: con la sesion abierta dentro de un repositorio, `node scripts/hooks/x.js` falla con 1 y el comando pasa SIN revisar. La marca --ai-managed identifica lo que administra consolidate-skills; lo demas del settings.json es del proyecto."
+      },
+      "launch": {
+        "command": "claude",
+        "args": [
+          "--add-dir",
+          "{root}"
+        ],
+        "env": {}
+      },
+      "headless": {
+        "command": "claude",
+        "args": [
+          "-p",
+          "--output-format",
+          "stream-json",
+          "--verbose"
+        ],
+        "promptVia": "stdin",
+        "budgetFlag": "--max-budget-usd",
+        "skipPermissionsFlag": "--dangerously-skip-permissions",
+        "events": "claude-stream-json"
+      }
+    },
+    "opencode": {
+      "title": "OpenCode",
+      "output": ".opencode/",
+      "generated": true,
+      "skillsDir": ".opencode/skills",
+      "skillFile": "SKILL.md",
+      "agentsDir": ".opencode/agents",
+      "_comment_frontmatter": "OpenCode usa un mapa de booleanos para las herramientas y nombra los modelos como proveedor/modelo.",
+      "frontmatter": {
+        "description": "inline",
+        "mode": true,
+        "tools": "map",
+        "model": "mapped"
+      },
+      "modelMap": {
+        "opus": "anthropic/claude-opus-5",
+        "sonnet": "anthropic/claude-sonnet-5",
+        "haiku": "anthropic/claude-haiku-4-5"
+      },
+      "hooks": {
+        "format": "opencode-plugin",
+        "dir": ".opencode/plugins",
+        "events": {
+          "pre-write": {
+            "hook": "tool.execute.before",
+            "tools": [
+              "write",
+              "edit"
+            ]
+          },
+          "pre-bash": {
+            "hook": "tool.execute.before",
+            "tools": [
+              "bash"
+            ]
+          }
+        },
+        "_comment": "Sin evento post-write: tool.execute.after de OpenCode no entrega la ruta del archivo escrito. Un hook post-write se reporta como no registrado en este harness."
+      },
+      "launch": {
+        "command": "opencode",
+        "args": [
+          "--dir",
+          "{cwd}"
+        ],
+        "env": {
+          "OPENCODE_CONFIG": "{root}/opencode.json",
+          "OPENCODE_CONFIG_DIR": "{root}/.opencode"
+        }
+      }
+    },
+    "agents-md": {
+      "title": "AGENTS.md (Codex y otras)",
+      "output": "AGENTS.md",
+      "generated": true,
+      "_comment": "Sin skillsDir ni agentsDir a proposito: estas herramientas leen el AGENTS.md de la raiz y no tienen arbol propio. Se genera como documento, no como punteros."
+    }
+  },
+  "_comment_core": "Se instala siempre, sin importar el stack. El detalle de skills y agentes vive en ai/core/manifest.json; acá se listan los archivos que template-sync debe mantener al día.",
+  "core": {
+    "rules": [
+      "ai/core/rules/datos-sensibles.md",
+      "ai/core/rules/antipatterns.js",
+      "ai/core/rules/requisitos.md",
+      "ai/core/rules/verificar-lo-que-el-runner-no-ve.md",
+      "ai/core/rules/edicion-por-reemplazo.md",
+      "ai/core/rules/dobles-de-repositorio.md",
+      "ai/core/rules/aislamiento-de-rama.md",
+      "ai/core/rules/autoria-de-activos.md"
+    ],
+    "procedures": [
+      "ai/core/procedures/code-professor.md",
+      "ai/core/procedures/git-commit-workflow.md",
+      "ai/core/procedures/create-branch.md",
+      "ai/core/procedures/gate-from-finding.md",
+      "ai/core/procedures/pr-review.md",
+      "ai/core/procedures/worktree-slots.md",
+      "ai/core/procedures/project-loader.md",
+      "ai/core/procedures/task-estimation.md",
+      "ai/core/procedures/project-estimation.md",
+      "ai/core/procedures/shared-dependencies.md",
+      "ai/core/procedures/domain-gate.md",
+      "ai/core/procedures/shadow-migration.md",
+      "ai/core/procedures/cerrar-ticket.md",
+      "ai/core/procedures/git-sync-branch.md",
+      "ai/core/procedures/ciclo-de-tarea.md",
+      "ai/core/procedures/trabajo-autonomo.md",
+      "ai/core/procedures/redactar-requisito.md",
+      "ai/core/procedures/resumen-humano.md",
+      "ai/core/procedures/tracker-events.md",
+      "ai/core/procedures/prueba-e2e.md"
+    ],
+    "agents": [
+      "ai/core/agents/workspace-router.md",
+      "ai/core/agents/qa-agent.md",
+      "ai/core/agents/code-reviewer.md",
+      "ai/core/agents/security-auditor.md",
+      "ai/core/agents/project-setup-agent.md"
+    ],
+    "prompts": [
+      "ai/core/prompts/code-review/README.md",
+      "ai/core/prompts/code-review/review-tecnico.md",
+      "ai/core/prompts/code-review/review-contrato-diseno.md"
+    ],
+    "skills": [],
+    "scripts": [
+      "scripts/lib/workspace-config.js",
+      "scripts/lib/asset-roots.js",
+      "scripts/lib/languages.js",
+      "scripts/lib/harnesses.js",
+      "scripts/lib/test-discovery.js",
+      "scripts/lib/baseline.js",
+      "scripts/lib/gates.js",
+      "scripts/consolidate-skills.js",
+      "scripts/check-context-links.js",
+      "scripts/run-gates.js",
+      "scripts/check-secrets.js",
+      "scripts/hooks/pre-write-secrets.js",
+      "scripts/hooks/post-edit-checks.js",
+      "scripts/check-antipatterns.js",
+      "scripts/check-duplication.js",
+      "scripts/check-semgrep.js",
+      "scripts/lib/render.js",
+      "scripts/lib/template-files.js",
+      "scripts/template-sync.js",
+      "scripts/manage-worktree.js",
+      "scripts/lib/sdd.js",
+      "scripts/check-scenario-coverage.js",
+      "scripts/lib/gate-cli.js",
+      "scripts/verify-findings.js",
+      "scripts/baseline-report.js",
+      "scripts/check-context-budget.js",
+      "scripts/check-deps.js",
+      "scripts/statusline.js",
+      "scripts/start-worktree-session.js",
+      "scripts/lib/deps-link.js",
+      "scripts/lib/worktree-paths.js",
+      "scripts/run-checks.js",
+      "scripts/check-cochange.js",
+      "scripts/check-unreachable-code.js",
+      "scripts/check-encoding.js",
+      "scripts/verify-rules.js",
+      "scripts/check-gate-candidates.js",
+      "scripts/lib/repo-location.js",
+      "scripts/lib/review-base.js",
+      "scripts/lib/domain-gate.js",
+      "scripts/lib/cochange.js",
+      "scripts/lib/globs.js",
+      "scripts/lib/guard-core.js",
+      "scripts/allow-protected-edit.js",
+      "scripts/hooks/pre-write-protected.js",
+      "scripts/hooks/pre-bash-slot-deps.js",
+      "scripts/hooks/pre-bash-slot-migrations.js",
+      "scripts/hooks/pre-commit-attribution.js",
+      "scripts/hooks/pre-commit-gates.js",
+      "scripts/hooks/pre-bash-heredoc.js",
+      "scripts/check-requirements.js",
+      "scripts/trabajo-por-sesion.js",
+      "scripts/lib/hooks.js",
+      "scripts/lib/deps-profiles.js"
+    ],
+    "templates": [
+      "templates/ai-workspace.example.json",
+      "templates/claude-settings.json",
+      "templates/CLAUDE.md.tpl",
+      "templates/AGENTS.md.tpl",
+      "templates/README.md.tpl",
+      "templates/INVENTORY.md.tpl",
+      "templates/project-brief.md.tpl",
+      "templates/rules-negocio.md.tpl",
+      "templates/rules-datos-sensibles.md.tpl"
+    ],
+    "docs": [
+      "docs/onboarding.md",
+      "docs/actualizar-la-base.md",
+      "docs/sistema-agentico.md",
+      "docs/agregar-un-harness.md",
+      "docs/agregar-un-pack-de-lenguaje.md",
+      "docs/agregar-un-sdd.md",
+      "docs/manual-ia-por-roles.md",
+      "docs/verificar-la-base.md",
+      "docs/costo-de-contexto.md",
+      "docs/circuito-de-trabajo.md"
+    ],
+    "tests": [
+      "test/helpers.js",
+      "test/gates.test.js",
+      "test/contract.test.js",
+      "test/rules.test.js",
+      "test/verify-findings.test.js",
+      "test/fixtures/ai-workspace.test.json",
+      "test/worktree-slots.test.js",
+      "test/statusline.test.js",
+      "test/deps-link.test.js",
+      "test/slot-workspace.js",
+      "test/workspace-helper.js",
+      "test/run-gates.test.js",
+      "test/run-checks.test.js",
+      "test/cochange.test.js",
+      "test/unreachable.test.js",
+      "test/encoding.test.js",
+      "test/verify-rules.test.js",
+      "test/domain-gate.test.js",
+      "test/repo-location.test.js",
+      "test/gate-candidates.test.js",
+      "test/check-secrets-sec5.test.js",
+      "test/fixtures/gates/fake-gate.js",
+      "test/fixtures/checks/check.js",
+      "test/fixtures/domain/check-demo.js",
+      "test/hooks-fixture.js",
+      "test/hooks-slot-deps.test.js",
+      "test/hooks-slot-migrations.test.js",
+      "test/hooks-protected.test.js",
+      "test/hooks-commit.test.js",
+      "test/migration-shadow.test.js",
+      "test/requirements.test.js",
+      "test/trabajo-por-sesion.test.js",
+      "test/pr-review-docs.test.js",
+      "test/e2e-scripts.test.js",
+      "test/foundation.test.js",
+      "test/review-base.test.js",
+      "test/init-proyecto-vacio.test.js"
+    ],
+    "references": [
+      "ai/core/references/estimation-output-format.md",
+      "ai/core/references/project-estimation/wbs.md",
+      "ai/core/references/project-estimation/informe.md",
+      "ai/core/references/project-estimation/modulos/prototipo-a-produccion.md",
+      "ai/core/references/project-estimation/modulos/funcionalidad-especifica.md",
+      "ai/core/references/project-estimation/modulos/qa-y-automatizacion.md",
+      "ai/core/references/project-estimation/modulos/infra-y-devops.md",
+      "ai/core/references/project-estimation/modulos/integraciones-externas.md",
+      "ai/core/references/project-estimation/modulos/soporte-y-evolutivos.md"
+    ]
+  },
+  "_comment_packs": "Opcionales. El init instala solo los elegidos. `appliesTo` indica si el pack se declara a nivel de repositorio o de workspace.",
+  "packs": {
+    "nestjs": {
+      "title": "Backend NestJS",
+      "appliesTo": "repo",
+      "description": "Arquitectura de modulos, patrones de base de datos, DTOs y validacion, errores con codigos de dominio, migraciones, testing.",
+      "procedures": [
+        "ai/packs/nestjs/procedures/nestjs-module-development.md",
+        "ai/packs/nestjs/procedures/nestjs-database-patterns.md",
+        "ai/packs/nestjs/procedures/nestjs-dto-patterns.md",
+        "ai/packs/nestjs/procedures/nestjs-error-handling.md",
+        "ai/packs/nestjs/procedures/nestjs-create-migration.md"
+      ],
+      "agents": [],
+      "rules": [
+        "ai/packs/nestjs/rules/antipatterns.js",
+        "ai/packs/nestjs/rules/probar-el-borde.md"
+      ],
+      "scripts": [
+        "ai/packs/nestjs/scripts/migration-generate-shadow.js"
+      ],
+      "prompts": []
+    },
+    "nextjs": {
+      "title": "Frontend Next.js",
+      "appliesTo": "repo",
+      "description": "Componentes, tablas de datos, formularios con validacion, hooks de data-fetching, servidor vs cliente, manejo de errores, i18n.",
+      "procedures": [
+        "ai/packs/nextjs/procedures/nextjs-server-vs-client.md",
+        "ai/packs/nextjs/procedures/nextjs-data-fetching.md",
+        "ai/packs/nextjs/procedures/nextjs-create-component.md",
+        "ai/packs/nextjs/procedures/nextjs-bff-endpoint.md"
+      ],
+      "agents": [],
+      "rules": [
+        "ai/packs/nextjs/rules/antipatterns.js",
+        "ai/packs/nextjs/rules/copy-de-interfaz.md"
+      ],
+      "scripts": [],
+      "prompts": []
+    },
+    "dotnet": {
+      "title": "Backend .NET / C#",
+      "appliesTo": "repo",
+      "description": "Perfil de lenguaje para C#, anti-patrones de .NET y los procedimientos del stack: desarrollo de una funcionalidad, patrones de EF Core, contratos de entrada y salida, manejo de errores y migraciones.",
+      "procedures": [
+        "ai/packs/dotnet/procedures/dotnet-feature-development.md",
+        "ai/packs/dotnet/procedures/dotnet-database-patterns.md",
+        "ai/packs/dotnet/procedures/dotnet-dto-patterns.md",
+        "ai/packs/dotnet/procedures/dotnet-error-handling.md",
+        "ai/packs/dotnet/procedures/dotnet-create-migration.md"
+      ],
+      "agents": [],
+      "rules": [
+        "ai/packs/dotnet/rules/antipatterns.js",
+        "ai/packs/dotnet/rules/semgrep/antipatterns.yml"
+      ],
+      "scripts": [],
+      "prompts": []
+    },
+    "multi-tenant": {
+      "title": "Aislamiento por tenant",
+      "appliesTo": "workspace",
+      "description": "Filtrado obligatorio por la columna de tenant y su verificacion automatica.",
+      "procedures": [],
+      "agents": [],
+      "rules": [
+        "ai/packs/multi-tenant/rules/tenant-isolation.md"
+      ],
+      "scripts": [
+        "ai/packs/multi-tenant/scripts/check-tenant-isolation.js"
+      ],
+      "prompts": []
+    },
+    "openspec": {
+      "title": "Ciclo dirigido por especificacion",
+      "appliesTo": "workspace",
+      "description": "Ciclo propuesta -> diseno -> tests -> implementacion -> archivado sobre OpenSpec, con disciplina de alcance, agentes SDD y verificacion de cobertura de escenarios. Requiere el CLI de OpenSpec instalado.",
+      "requires": [
+        "openspec"
+      ],
+      "procedures": [
+        "ai/packs/openspec/procedures/spec-scope-discipline.md",
+        "ai/packs/openspec/procedures/spec-propose.md",
+        "ai/packs/openspec/procedures/spec-driven-testing.md",
+        "ai/packs/openspec/procedures/spec-apply.md",
+        "ai/packs/openspec/procedures/spec-archive.md",
+        "ai/packs/openspec/procedures/spec-explore.md"
+      ],
+      "agents": [
+        "ai/packs/openspec/agents/spec-agent.md"
+      ],
+      "rules": [],
+      "scripts": [],
+      "prompts": []
+    },
+    "tracker-jira": {
+      "title": "Tracker Jira (guia de adaptacion)",
+      "appliesTo": "workspace",
+      "description": "Guia para que un agente sin contexto configure como se mueven las tarjetas de Jira en el proyecto: ids de transicion por tipo de tarjeta, vinculo con la historia, verificacion. No trae ids ni identificadores de sitio de ningun proyecto.",
+      "procedures": [
+        "ai/packs/tracker-jira/procedures/tracker-jira-adaptar.md"
+      ],
+      "agents": [],
+      "rules": [],
+      "scripts": [],
+      "prompts": []
+    },
+    "tracker-github": {
+      "title": "Tracker GitHub (guia de adaptacion)",
+      "appliesTo": "workspace",
+      "description": "Guia para que un agente sin contexto configure como se mueven los issues de GitHub en el proyecto (etiquetas o tablero de proyectos), sin cerrarlos: modo, ids medidos, vinculo con la historia, verificacion.",
+      "procedures": [
+        "ai/packs/tracker-github/procedures/tracker-github-adaptar.md"
+      ],
+      "agents": [],
+      "rules": [],
+      "scripts": [],
+      "prompts": []
+    },
+    "fullstack": {
+      "title": "Full-stack (contrato entre repositorios)",
+      "appliesTo": "workspace",
+      "description": "Sesion de un slot full-stack: el repositorio que define el contrato manda sobre el que lo consume, desfase de estrictez entre esquemas, commits separados por repositorio. Sin stack fijo: usa repos[] y los packs de cada repositorio.",
+      "procedures": [
+        "ai/packs/fullstack/procedures/contrato-backend-frontend.md"
+      ],
+      "agents": [
+        "ai/packs/fullstack/agents/fullstack-agent.md"
+      ],
+      "rules": [],
+      "scripts": [],
+      "prompts": []
+    },
+    "e2e": {
+      "title": "Pruebas de punta a punta (kit y linter de scripts)",
+      "appliesTo": "workspace",
+      "description": "Guia para armar el kit e2e del proyecto y un linter de scripts e2e que no los ejecuta (Python y JS/TS), configurable con `e2e` en ai-workspace.json.",
+      "procedures": [
+        "ai/packs/e2e/procedures/armar-kit-e2e.md"
+      ],
+      "agents": [],
+      "rules": [],
+      "scripts": [
+        "ai/packs/e2e/scripts/check-e2e-scripts.js"
+      ],
+      "prompts": []
+    }
+  }
+}

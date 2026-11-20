@@ -1,0 +1,25 @@
+{
+  "_comment": "Pack fullstack. Sesion de un slot full-stack: el repositorio que define el contrato manda sobre el que lo consume, desfase de estrictez entre esquemas, commits separados por repositorio. Sin stack fijo: usa repos[] y los packs de cada repositorio.",
+  "skills": [
+    {
+      "name": "contrato-backend-frontend",
+      "title": "Contrato entre el repositorio que expone y el que consume",
+      "description": "Trabajar un cambio que cruza dos repositorios: el proveedor primero y su contrato escrito, el consumidor lo lee, esquemas no mas estrictos que el contrato.",
+      "compatibility": "Run from the workspace root.",
+      "version": "1.0",
+      "state": "experimental"
+    }
+  ],
+  "agents": [
+    {
+      "name": "fullstack-agent",
+      "title": "Full-Stack Agent",
+      "description": "Punto de entrada de una sesion de slot full-stack: el contrato del proveedor manda sobre el consumidor, un commit por repositorio.",
+      "mode": "primary",
+      "filenames": {
+        "opencode": "fullstack"
+      },
+      "state": "experimental"
+    }
+  ]
+}

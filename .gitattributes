@@ -1,0 +1,11 @@
+# La base se usa en Windows, macOS y Linux. Los finales de línea se normalizan
+# a LF en el repositorio para que los scripts y los hooks no cambien de hash
+# según la máquina que los clonó — template-sync compara por hash.
+* text=auto eol=lf
+
+# Binarios: sin conversión
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.pdf binary
