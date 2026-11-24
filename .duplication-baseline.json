@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "scopes": {
+    "DemoOdooRecruitmentATS": [
+      "DemoOdooRecruitmentATS/openspec/changes/archive/2026-11-10-odoo-ats-lab/specs/adhoc-extensions/spec.md<->DemoOdooRecruitmentATS/openspec/specs/adhoc-extensions/spec.md|9afa3b9f06df",
+      "DemoOdooRecruitmentATS/openspec/changes/archive/2026-11-10-odoo-ats-lab/specs/external-integration/spec.md<->DemoOdooRecruitmentATS/openspec/specs/external-integration/spec.md|0a4622c730ff",
+      "DemoOdooRecruitmentATS/openspec/changes/archive/2026-11-10-odoo-ats-lab/specs/infrastructure/spec.md<->DemoOdooRecruitmentATS/openspec/specs/infrastructure/spec.md|fbfe2239bfb0",
+      "DemoOdooRecruitmentATS/openspec/changes/archive/2026-11-10-odoo-ats-lab/specs/odoo-orm/spec.md<->DemoOdooRecruitmentATS/openspec/specs/odoo-orm/spec.md|66a8d050b816",
+      "DemoOdooRecruitmentATS/openspec/changes/archive/2026-11-10-odoo-ats-lab/specs/recruitment-ats/spec.md<->DemoOdooRecruitmentATS/openspec/specs/recruitment-ats/spec.md|8b64aa2ade5e"
+    ]
+  },
+  "frozenAt": "2026-11-20"
+}

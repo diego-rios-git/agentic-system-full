@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "project": {
+    "name": "demo-odoo-recruitment-ats",
+    "title": "Demo Odoo Recruitment ATS",
+    "language": "es"
+  },
+  "topology": "multi-repo",
+  "repos": [
+    {
+      "name": "DemoOdooRecruitmentATS",
+      "path": "DemoOdooRecruitmentATS",
+      "packs": [],
+      "stack": "python/odoo19",
+      "languages": [
+        "python"
+      ],
+      "language": {
+        "id": "python",
+        "extensions": [
+          ".py"
+        ],
+        "ignoreDirs": [
+          ".venv",
+          "__pycache__",
+          ".pytest_cache",
+          ".mypy_cache"
+        ],
+        "ignorePaths": [],
+        "testPatterns": [
+          "(^|/)test_[^/]+\\.py$",
+          "_test\\.py$",
+          "(^|/)tests?/"
+        ],
+        "syntax": {
+          "lineComment": "#",
+          "stringDelimiters": [
+            "\"",
+            "'"
+          ],
+          "rawStringPrefixes": [
+            "r\"",
+            "r'",
+            "\"\"\"",
+            "'''"
+          ]
+        },
+        "envAccess": [
+          "os.environ",
+          "os.getenv",
+          "config.get"
+        ],
+        "testTitles": {
+          "strategy": "function-name",
+          "keyword": "def",
+          "prefix": "test_"
+        }
+      },
+      "testCommand": "docker compose run --rm odoo-ats odoo -d ats_test_tmp -i ats_api --test-enable --test-tags /ats_api --stop-after-init",
+      "baseBranch": "develop"
+    }
+  ],
+  "packs": [
+    "openspec",
+    "e2e",
+    "analisis-funcional"
+  ],
+  "harnesses": [
+    "agents-md"
+  ],
+  "worktrees": {
+    "enabled": true,
+    "dir": "worktrees",
+    "slots": [
+      "implementation-1",
+      "implementation-2",
+      "review"
+    ]
+  }
+}

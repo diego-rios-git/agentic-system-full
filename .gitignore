@@ -3,40 +3,35 @@ node_modules/
 
 # Configuración personal — cada persona decide su propio nivel de permisos
 **/settings.local.json
-.env
-.env.*
 
 # Secretos
+.env
+.env.*
 *.pem
 *.key
 
-# Artefactos de proyectos generados: no pertenecen a la semilla.
-# Los punteros de harness son salida generada: se regeneran con
-# `consolidate-skills.js --wrappers`, nunca se versionan acá.
-ai/local/
-ai-workspace.json
-template.lock.json
-*-baseline.json
+# Estado local de los gates y de los hooks (no se comparte entre personas)
 .ai-gates-log.jsonl
 .ai-gates-log.1.jsonl
+.ai-gates-cache.json
 .ai-gates-unverified.json
 .protected-edit-allow.json
-.claude/skills/
-.claude/agents/
-!.claude/settings.json
-!.claude/settings.local.json.example
-.opencode/
 
-# Salidas de prueba del init
+# Slots de worktree
+worktrees/
 .tmp/
-test-output/
 
 # Sistema operativo y editores
 .DS_Store
 Thumbs.db
-*.swp
 .idea/
-.vscode/
 
-# Cache del hook de escritura: local, se regenera solo.
-.ai-gates-cache.json
+# Repositorios de aplicación: cada uno tiene su propio git
+DemoOdooRecruitmentATS/
+
+# Lo que SÍ se versiona, dicho explícitamente porque suele dudarse:
+#   ai-workspace.json      la configuración del workspace, es del equipo
+#   template.lock.json     qué versión de la base está instalada
+#   *-baseline.json        la deuda congelada; tiene que ser la misma para todos
+#   ai/local/             el contexto del proyecto
+#   .claude/ .opencode/   punteros generados: así funciona al clonar, sin regenerar

@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "scopes": {
+    "workspace": [
+      "ai/core/procedures/shadow-migration.md|ai/packs/nestjs/scripts/migration-generate-shadow.js",
+      "ai/core/rules/dobles-de-repositorio.md|ai/packs/nestjs/rules/probar-el-borde.md",
+      "docs/agregar-un-harness.md|.claude/skills/pr-review/SKILL.md",
+      "docs/agregar-un-harness.md|.opencode/skills/pr-review/SKILL.md",
+      "docs/circuito-de-trabajo.md|ai/packs/nestjs/scripts/migration-generate-shadow.js"
+    ]
+  },
+  "frozenAt": "2026-11-20"
+}
